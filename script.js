@@ -1,582 +1,424 @@
- /* ============ TOKENS ============ */
-:root{
-  --ink:#0B0B0C;          /* near-black base */
-  --ink-2:#141416;        /* raised surface */
-  --ink-3:#1D1D20;        /* card */
-  --brass:#C9A24A;        /* primary gold */
-  --brass-lt:#E7CE8E;     /* highlight gold */
-  --brass-dk:#8A6C24;     /* deep gold */
-  --bone:#F6F3EC;         /* warm white */
-  --bone-dim:rgba(246,243,236,.62);
-  --line:rgba(201,162,74,.22);
-  --ember:#B4472B;        /* charcoal-fire accent, used sparingly */
+ (function(){
+"use strict";
+var $=function(s,c){return (c||document).querySelector(s)};
+var $$=function(s,c){return Array.prototype.slice.call((c||document).querySelectorAll(s))};
+var rs=function(n){return "Rs "+n.toLocaleString("en-PK")};
 
-  --display:'Fraunces',Georgia,serif;
-  --body:'Jost',system-ui,-apple-system,sans-serif;
-  --mono:'JetBrains Mono',ui-monospace,monospace;
+/* ---------- DATA ---------- */
+var IMG={
+  seekh:"https://images.unsplash.com/photo-1599487488170-d11ec9c172f0?q=80&w=800&auto=format&fit=crop",
+  karahi:"https://images.unsplash.com/photo-1631452180519-c014fe946bc7?q=80&w=800&auto=format&fit=crop",
+  tikka:"https://images.unsplash.com/photo-1610057099443-fde8c4d50f91?q=80&w=800&auto=format&fit=crop",
+  boti:"https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=800&auto=format&fit=crop",
+  malai:"https://images.unsplash.com/photo-1567188040759-fb8a883dc6d8?q=80&w=800&auto=format&fit=crop",
+  chops:"https://images.unsplash.com/photo-1558030006-450675393462?q=80&w=800&auto=format&fit=crop",
+  nihari:"https://images.unsplash.com/photo-1585937421612-70a008356fbe?q=80&w=800&auto=format&fit=crop",
+  handi:"https://images.unsplash.com/photo-1565557623262-b51c2513a641?q=80&w=800&auto=format&fit=crop",
+  daal:"https://images.unsplash.com/photo-1546833999-b9f581a1996d?q=80&w=800&auto=format&fit=crop",
+  qorma:"https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?q=80&w=800&auto=format&fit=crop",
+  biryani:"https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?q=80&w=800&auto=format&fit=crop",
+  pulao:"https://images.unsplash.com/photo-1596797038530-2c107229654b?q=80&w=800&auto=format&fit=crop",
+  naan:"https://images.unsplash.com/photo-1601050690597-df0568f70950?q=80&w=800&auto=format&fit=crop",
+  roti:"https://images.unsplash.com/photo-1626074353765-517a681e40be?q=80&w=800&auto=format&fit=crop",
+  paratha:"https://images.unsplash.com/photo-1619221882220-947b3d3c8861?q=80&w=800&auto=format&fit=crop",
+  raita:"https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?q=80&w=800&auto=format&fit=crop",
+  kheer:"https://images.unsplash.com/photo-1488477181946-6428a0291777?q=80&w=800&auto=format&fit=crop",
+  gulab:"https://images.unsplash.com/photo-1606491956689-2ea866880c84?q=80&w=800&auto=format&fit=crop",
+  falooda:"https://images.unsplash.com/photo-1497534446932-c925b458314e?q=80&w=800&auto=format&fit=crop",
+  lassi:"https://images.unsplash.com/photo-1553530666-ba11a7da3888?q=80&w=800&auto=format&fit=crop",
+  chai:"https://images.unsplash.com/photo-1571934811356-5cc061b6821f?q=80&w=800&auto=format&fit=crop",
+  soda:"https://images.unsplash.com/photo-1437418747212-8d9709afab22?q=80&w=800&auto=format&fit=crop"
+};
 
-  --pad:clamp(20px,5vw,72px);
-  --gap:clamp(28px,4vw,56px);
-  --sec:clamp(64px,9vw,130px);
-  --r:2px;
-  --ease:cubic-bezier(.22,.61,.36,1);
-}
+var MENU=[
+ {id:"m1", cat:"grill", n:"Beef Seekh Kebab", d:"Hand-minced beef, green chilli and roasted coriander, pressed onto skewers and cooked straight over coals.", p:640, img:IMG.seekh, tag:"Best seller"},
+ {id:"m2", cat:"grill", n:"Chicken Malai Boti", d:"Cream and cheddar marinade held overnight, grilled soft with a light char on the edges.", p:720, img:IMG.malai},
+ {id:"m3", cat:"grill", n:"Mutton Champ", d:"Six rib chops in a yoghurt and papaya marinade, finished with lemon and black pepper.", p:1290, img:IMG.chops, tag:"Chef's pick"},
+ {id:"m4", cat:"grill", n:"Chicken Tikka (Half)", d:"Bone-in leg and thigh, deep red masala, twenty minutes over the pit. Served with naan.", p:480, img:IMG.tikka},
+ {id:"m5", cat:"grill", n:"Beef Boti", d:"Cubes of undercut in a dry garam masala rub, skewered with onion and capsicum.", p:790, img:IMG.boti},
+ {id:"m6", cat:"grill", n:"Mixed Grill Platter", d:"Seekh, malai boti, tikka and champ on one tray with mint chutney, salad and four rotis.", p:2150, img:IMG.boti, tag:"For 3–4"},
 
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth;scroll-padding-top:78px;-webkit-text-size-adjust:100%}
-html,body{max-width:100%;overflow-x:clip}
-body{
-  background:var(--ink);color:var(--bone);
-  font-family:var(--body);font-weight:300;font-size:16px;line-height:1.65;
-  overflow-x:hidden;width:100%;
-  -webkit-font-smoothing:antialiased;
-}
-img{max-width:100%;display:block;height:auto}
-a{color:inherit;text-decoration:none}
-button,input,select,textarea{font:inherit;color:inherit}
-button{background:none;border:none;cursor:pointer}
-ul{list-style:none}
-:focus-visible{outline:2px solid var(--brass);outline-offset:3px}
+ {id:"m7", cat:"karahi", n:"Mutton Karahi (1 kg)", d:"Slow cooked in the wok for fifty minutes with tomato, ginger and whole black pepper.", p:2680, img:IMG.karahi, tag:"Signature"},
+ {id:"m8", cat:"karahi", n:"Chicken White Karahi (1 kg)", d:"No tomato, no colour — just yoghurt, cream, green chilli and a lot of black pepper.", p:1740, img:IMG.handi},
+ {id:"m9", cat:"karahi", n:"Beef Nihari", d:"Shank simmered from midnight, served with ginger julienne, lemon and fried onion.", p:690, img:IMG.nihari, tag:"Limited daily"},
+ {id:"m10", cat:"karahi", n:"Chicken Handi", d:"Boneless chicken in a sealed clay pot with cashew and cream. Rich and mild.", p:1180, img:IMG.handi},
+ {id:"m11", cat:"karahi", n:"Daal Makhani", d:"Black lentils on low heat for nine hours, finished with butter and a smoke of coal.", p:480, img:IMG.daal},
+ {id:"m12", cat:"karahi", n:"Mutton Qorma", d:"Brown onion and yoghurt base, cardamom-forward, the way it is made at weddings here.", p:1320, img:IMG.qorma},
 
-.wrap{width:min(1240px,100% - (var(--pad)*2))!important;margin-inline:auto}
-section{padding-block:var(--sec);position:relative}
+ {id:"m13", cat:"rice", n:"Chicken Biryani", d:"Long-grain sella layered with chicken masala and kewra, sealed and steamed to order.", p:520, img:IMG.biryani, tag:"Best seller"},
+ {id:"m14", cat:"rice", n:"Mutton Biryani", d:"Same method, mutton shoulder. Takes twenty-five minutes — worth the wait.", p:760, img:IMG.biryani},
+ {id:"m15", cat:"rice", n:"Beef Pulao", d:"Cooked in bone stock with whole spice, no colour added. Served with kachumber.", p:610, img:IMG.pulao},
+ {id:"m16", cat:"rice", n:"Kabuli Pulao", d:"Afghan style with carrot, raisin and almond over a mutton shank.", p:980, img:IMG.pulao},
 
-/* eyebrow: a real signal — each section is a "course" on the page */
-.eyebrow{
-  font-family:var(--mono);font-size:11px;letter-spacing:.28em;text-transform:uppercase;
-  color:var(--brass);display:flex;align-items:center;gap:12px;margin-bottom:18px;
-}
-.eyebrow::before{content:"";width:26px;height:1px;background:var(--brass);opacity:.7;flex:none}
+ {id:"m17", cat:"bread", n:"Tandoori Roti", d:"Whole wheat, straight off the wall of the wood-fired tandoor.", p:35, img:IMG.roti},
+ {id:"m18", cat:"bread", n:"Butter Naan", d:"Soft white flour naan brushed with desi ghee as it comes out.", p:80, img:IMG.naan},
+ {id:"m19", cat:"bread", n:"Garlic Cheese Naan", d:"Mozzarella and roasted garlic folded through, served in four pieces.", p:280, img:IMG.naan, tag:"Popular"},
+ {id:"m20", cat:"bread", n:"Aloo Paratha", d:"Layered and pan-fried with spiced potato, served with butter and raita.", p:210, img:IMG.paratha},
+ {id:"m21", cat:"bread", n:"Raita &amp; Salad", d:"Mint yoghurt raita with a plate of onion, cucumber, tomato and lemon.", p:150, img:IMG.raita},
 
-h1,h2,h3{font-family:var(--display);font-weight:600;line-height:1.03;letter-spacing:-.02em}
-h2{font-size:clamp(32px,5.4vw,62px)}
-h3{font-size:clamp(20px,2.4vw,27px);line-height:1.15}
-.lede{color:var(--bone-dim);font-size:clamp(15px,1.4vw,17.5px);max-width:56ch}
+ {id:"m22", cat:"sweet", n:"Kheer", d:"Rice pudding cooked down slowly, chilled, topped with pistachio.", p:220, img:IMG.kheer},
+ {id:"m23", cat:"sweet", n:"Gulab Jamun (4 pc)", d:"Fried khoya dumplings in warm cardamom syrup.", p:260, img:IMG.gulab},
+ {id:"m24", cat:"sweet", n:"Kashmiri Falooda", d:"Rose syrup, vermicelli, basil seed and kulfi in a tall glass.", p:340, img:IMG.falooda, tag:"Popular"},
 
-/* ============ BUTTONS ============ */
-.btn{
-  display:inline-flex;align-items:center;justify-content:center;gap:10px;
-  padding:15px 28px;border-radius:var(--r);
-  font-family:var(--body);font-weight:500;font-size:13px;
-  letter-spacing:.16em;text-transform:uppercase;
-  transition:.35s var(--ease);cursor:pointer;text-align:center;
-  border:1px solid transparent;white-space:nowrap;
-}
-.btn-gold{background:var(--brass);color:#100D06;border-color:var(--brass)}
-.btn-gold:hover{background:var(--brass-lt);border-color:var(--brass-lt);transform:translateY(-2px)}
-.btn-ghost{border-color:rgba(246,243,236,.28);color:var(--bone);background:transparent}
-.btn-ghost:hover{border-color:var(--brass);color:var(--brass);transform:translateY(-2px)}
-.btn-sm{padding:11px 20px;font-size:11.5px}
-.btn-block{width:100%}
+ {id:"m25", cat:"drink", n:"Sweet Lassi", d:"Thick set yoghurt blended with sugar and ice, served in a steel tumbler.", p:190, img:IMG.lassi},
+ {id:"m26", cat:"drink", n:"Doodh Patti Chai", d:"Full milk tea boiled down on the stove. One cup, properly made.", p:120, img:IMG.chai},
+ {id:"m27", cat:"drink", n:"Fresh Lime Soda", d:"Lime, soda and black salt. Sweet or salted, tell us which.", p:160, img:IMG.soda},
+ {id:"m28", cat:"drink", n:"Soft Drink (Regular)", d:"Chilled bottle. Cola, lemon-lime or orange.", p:100, img:IMG.soda}
+];
 
-/* ============ HEADER ============ */
-.hdr{
-  position:fixed;inset:0 0 auto 0;z-index:900;
-  transition:.4s var(--ease);
-  border-bottom:1px solid transparent;
-}
-.hdr::before{
-  content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(11,11,12,.86),rgba(11,11,12,0));
-  transition:.4s var(--ease);
-}
-.hdr.stuck{background:rgba(11,11,12,.93);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom-color:var(--line)}
-.hdr.stuck::before{opacity:0}
-.hdr-in{
-  position:relative;z-index:2;
-  display:flex;align-items:center;justify-content:space-between;gap:16px;
-  height:78px;
-}
-.hdr.stuck .hdr-in{height:66px}
-.hdr-in{transition:height .4s var(--ease)}
+var CATS=[
+ {k:"grill",  l:"Charcoal Grill"},
+ {k:"karahi", l:"Karahi & Curries"},
+ {k:"rice",   l:"Rice & Biryani"},
+ {k:"bread",  l:"Breads & Sides"},
+ {k:"sweet",  l:"Desserts"},
+ {k:"drink",  l:"Drinks"}
+];
 
-.logo{display:flex;align-items:center;gap:11px;flex:0 1 auto;min-width:0}
-.logo-mk{
-  width:38px;height:38px;flex:none;border:1px solid var(--brass);
-  display:grid;place-items:center;font-family:var(--display);font-weight:700;
-  font-size:14px;color:var(--brass);letter-spacing:.02em;
-}
-.logo-tx{min-width:0}
-.logo-tx b{display:block;font-family:var(--display);font-weight:700;font-size:16px;letter-spacing:.06em;line-height:1;white-space:nowrap}
-.logo-tx span{display:block;font-family:var(--mono);font-size:8.5px;letter-spacing:.32em;color:var(--brass);
-  text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+var SIGS=[
+ {id:"m7",  rank:"No. 01", n:"Mutton Karahi", d:"Fifty minutes in the wok. Tomato, ginger, crushed black pepper — the plate this place was built on.", p:2680, img:IMG.karahi},
+ {id:"m1",  rank:"No. 02", n:"Beef Seekh Kebab", d:"Minced by hand every morning, never a machine. Green chilli, roasted coriander, straight over coal.", p:640, img:IMG.seekh},
+ {id:"m9",  rank:"No. 03", n:"Beef Nihari", d:"Shank on the fire from midnight. Ginger, lemon, fried onion. Sold out most nights by ten.", p:690, img:IMG.nihari}
+];
 
-.nav{display:flex;align-items:center;gap:clamp(14px,2vw,30px)}
-.nav a{
-  font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;font-weight:400;
-  color:var(--bone-dim);position:relative;padding-block:6px;transition:color .3s;
-}
-.nav a::after{
-  content:"";position:absolute;left:0;bottom:0;width:0;height:1px;background:var(--brass);transition:width .35s var(--ease);
-}
-.nav a:hover,.nav a.on{color:var(--bone)}
-.nav a:hover::after,.nav a.on::after{width:100%}
+var REVIEWS=[
+ {q:"The nihari finishes by 10 pm and now I know why. I brought my father, who is impossible to please with food, and he asked for the recipe. They did not give it.", n:"Hamza Tariq", m:"Google · 3 weeks ago", i:"H"},
+ {q:"We booked the rooftop for eleven people on a Friday. Table was ready, the karahi came out at the same time as the bread, and nobody had to ask for anything twice.", n:"Ayesha Nadeem", m:"Google · 1 month ago", i:"A"},
+ {q:"Ordered delivery to Peoples Colony at half past midnight. Arrived in twenty-two minutes and the seekh was still hot enough to steam the box. That is rare here.", n:"Bilal Sheikh", m:"Google · 2 weeks ago", i:"B"}
+];
 
-.hdr-act{display:flex;align-items:center;gap:10px;flex:none}
-.cart-btn{
-  position:relative;width:42px;height:42px;border:1px solid var(--line);
-  display:grid;place-items:center;transition:.3s;
-}
-.cart-btn:hover{border-color:var(--brass);background:rgba(201,162,74,.08)}
-.cart-btn svg{width:19px;height:19px;stroke:var(--bone);fill:none;stroke-width:1.5}
-.cart-cnt{
-  position:absolute;top:-7px;right:-7px;min-width:19px;height:19px;padding:0 5px;
-  background:var(--brass);color:#100D06;border-radius:20px;
-  font-family:var(--mono);font-size:10px;font-weight:500;
-  display:grid;place-items:center;transform:scale(0);transition:transform .3s var(--ease);
-}
-.cart-cnt.show{transform:scale(1)}
-
-.burger{display:none;width:42px;height:42px;border:1px solid var(--line);place-items:center;flex-direction:column;gap:5px;transition:.3s}
-.burger:hover{border-color:var(--brass)}
-.burger i{display:block;width:17px;height:1.5px;background:var(--bone);transition:.35s var(--ease)}
-.burger.x i:nth-child(1){transform:translateY(6.5px) rotate(45deg)}
-.burger.x i:nth-child(2){opacity:0;transform:scaleX(0)}
-.burger.x i:nth-child(3){transform:translateY(-6.5px) rotate(-45deg)}
-
-/* mobile drawer */
-.drawer{
-  position:fixed;top:0;left:0;width:100%;height:100%;z-index:890;background:var(--ink);
-  transform:translateX(100%);transition:transform .5s var(--ease);
-  display:flex;flex-direction:column;padding:100px var(--pad) 40px;
-  overflow-y:auto;overflow-x:hidden;
-  visibility:hidden;
-}
-.drawer.open{transform:translateX(0);visibility:visible}
-.drawer a{
-  font-family:var(--display);font-size:clamp(26px,7vw,38px);font-weight:600;
-  padding:13px 0;border-bottom:1px solid rgba(201,162,74,.14);
-  display:flex;align-items:baseline;gap:14px;opacity:0;transform:translateX(24px);
-  width:100%;max-width:100%;
-}
-.drawer.open a{animation:slideIn .5s var(--ease) forwards}
-.drawer a em{font-family:var(--mono);font-size:11px;font-style:normal;color:var(--brass);opacity:.8}
-@keyframes slideIn{to{opacity:1;transform:none}}
-.drawer-foot{margin-top:auto;padding-top:34px;display:grid;gap:12px}
-.drawer-foot .btn{width:100%;font-size:12px;letter-spacing:.14em;padding:16px 20px}
-.drawer-meta{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;color:var(--brass);
-  text-transform:uppercase;margin-top:20px;line-height:1.95;padding-bottom:8px}
-.drawer-meta a{color:inherit;border-bottom:1px solid var(--line)}
-
-/* ============ HERO ============ */
-.hero{
-  min-height:100svh;padding:0;display:flex;align-items:flex-end;
-  position:relative;overflow:hidden;isolation:isolate;
-}
-.hero-bg{position:absolute;inset:0;z-index:-2}
-.hero-bg img{width:100%;height:100%;object-fit:cover;object-position:center 55%;animation:slowZoom 22s var(--ease) forwards}
-@keyframes slowZoom{from{transform:scale(1.14)}to{transform:scale(1)}}
-.hero-bg::after{
-  content:"";position:absolute;inset:0;
-  background:
-    linear-gradient(180deg,rgba(11,11,12,.92) 0%,rgba(11,11,12,.55) 18%,rgba(11,11,12,.3) 38%,rgba(11,11,12,.9) 78%,var(--ink) 100%),
-    radial-gradient(120% 80% at 15% 90%,rgba(11,11,12,.85),transparent 60%);
-}
-.hero-in{padding-block:clamp(90px,14vh,150px) clamp(46px,7vh,74px)}
-.hero-grid{display:grid;grid-template-columns:1fr auto;gap:var(--gap);align-items:end}
-.hero h1{
-  font-size:clamp(46px,9.2vw,124px);font-weight:600;line-height:.92;
-  letter-spacing:-.035em;margin-bottom:22px;
-}
-.hero h1 span{display:block}
-.hero h1 .gold{
-  color:var(--brass);font-style:italic;font-weight:400;
-  font-size:.82em;letter-spacing:-.01em;
-}
-.hero-tag{
-  font-family:var(--mono);font-size:clamp(10px,1.1vw,11.5px);letter-spacing:.34em;
-  text-transform:uppercase;color:var(--brass);margin-bottom:26px;
-}
-.hero .lede{margin-bottom:34px;max-width:44ch;color:rgba(246,243,236,.78)}
-.hero-cta{display:flex;flex-wrap:wrap;gap:12px}
-
-/* signature: the "fire card" — live service status */
-.ember-card{
-  border:1px solid var(--line);background:rgba(11,11,12,.62);backdrop-filter:blur(10px);
-  -webkit-backdrop-filter:blur(10px);
-  padding:24px 28px;min-width:268px;
-}
-.ember-row{display:flex;align-items:center;gap:9px;margin-bottom:18px;
-  padding-bottom:16px;border-bottom:1px solid var(--line)}
-.ember-dot{width:7px;height:7px;border-radius:50%;background:#4ADE80;box-shadow:0 0 0 0 rgba(74,222,128,.6);animation:pulse 2.4s infinite}
-@keyframes pulse{70%{box-shadow:0 0 0 9px rgba(74,222,128,0)}100%{box-shadow:0 0 0 0 rgba(74,222,128,0)}}
-.ember-row b{font-family:var(--mono);font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;font-weight:500}
-.ember-card dl{display:grid;gap:11px}
-.ember-card div{display:flex;justify-content:space-between;gap:28px;align-items:baseline;
-  padding-bottom:11px;border-bottom:1px solid rgba(246,243,236,.08)}
-.ember-card div:last-child{border:0;padding-bottom:0}
-.ember-card dt{font-size:12px;letter-spacing:.06em;color:var(--bone-dim);text-transform:uppercase}
-.ember-card dd{font-family:var(--mono);font-size:12.5px;color:var(--brass-lt)}
-
-/* marquee strip */
-.strip{
-  border-block:1px solid var(--line);background:var(--ink-2);
-  overflow:hidden;padding-block:16px;
-}
-.strip-tr{display:flex;gap:0;width:max-content;animation:slide 34s linear infinite}
-.strip:hover .strip-tr{animation-play-state:paused}
-@keyframes slide{to{transform:translateX(-50%)}}
-.strip span{
-  font-family:var(--mono);font-size:11.5px;letter-spacing:.26em;text-transform:uppercase;
-  color:var(--bone-dim);padding-inline:26px;display:flex;align-items:center;gap:26px;white-space:nowrap;
-}
-.strip span::after{content:"◆";color:var(--brass);font-size:8px}
-
-/* ============ ABOUT ============ */
-.about-grid{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:clamp(34px,5vw,80px);align-items:center}
-.about-imgs{position:relative;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px}
-.about-imgs figure{overflow:hidden;border:1px solid var(--line)}
-.about-imgs img{width:100%;aspect-ratio:3/4;object-fit:cover;transition:transform .9s var(--ease)}
-.about-imgs figure:hover img{transform:scale(1.06)}
-.about-imgs figure:first-child{margin-top:46px}
-.badge{
-  position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
-  width:118px;height:118px;border-radius:50%;background:var(--ink);
-  border:1px solid var(--brass);display:grid;place-content:center;text-align:center;
-  z-index:2;box-shadow:0 0 0 10px var(--ink);
-}
-.badge b{font-family:var(--display);font-size:29px;color:var(--brass);display:block;line-height:1}
-.badge span{font-family:var(--mono);font-size:8.5px;letter-spacing:.2em;color:var(--bone-dim);text-transform:uppercase}
-.about-txt h2{margin-bottom:20px}
-.about-txt p+p{margin-top:15px}
-.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin-top:36px;padding-top:32px;border-top:1px solid var(--line)}
-.stats b{font-family:var(--display);font-size:clamp(28px,3.4vw,40px);color:var(--brass);display:block;line-height:1}
-.stats span{font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--bone-dim);display:block;margin-top:7px}
-
-/* ============ SIGNATURE DISHES ============ */
-.sec-head{display:flex;justify-content:space-between;align-items:flex-end;gap:26px;flex-wrap:wrap;margin-bottom:var(--gap)}
-.sec-head .lede{margin-top:12px}
-
-.sig-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(14px,1.8vw,24px)}
-.sig{
-  position:relative;overflow:hidden;border:1px solid var(--line);
-  background:var(--ink-2);transition:.5s var(--ease);
-}
-.sig:hover{border-color:var(--brass);transform:translateY(-5px)}
-.sig-img{position:relative;aspect-ratio:4/5;overflow:hidden}
-.sig-img img{width:100%;height:100%;object-fit:cover;transition:transform .9s var(--ease)}
-.sig:hover .sig-img img{transform:scale(1.07)}
-.sig-img::after{content:"";position:absolute;inset:0;
-  background:linear-gradient(180deg,rgba(11,11,12,.18) 0%,rgba(11,11,12,.05) 26%,rgba(11,11,12,.72) 58%,rgba(11,11,12,.97) 100%)}
-.sig-rank{
-  position:absolute;top:14px;left:14px;z-index:2;
-  font-family:var(--mono);font-size:10px;letter-spacing:.16em;color:var(--brass);
-  border:1px solid var(--brass);padding:5px 9px;background:rgba(11,11,12,.6);backdrop-filter:blur(6px);
-}
-.sig-body{position:absolute;bottom:0;left:0;right:0;z-index:2;padding:22px}
-.sig-body h3{margin-bottom:7px}
-.sig-body p{font-size:13.5px;color:var(--bone-dim);line-height:1.5;margin-bottom:14px}
-.sig-foot{display:flex;align-items:center;justify-content:space-between;gap:12px}
-.price{font-family:var(--mono);font-size:16px;color:var(--brass);font-weight:500;white-space:nowrap}
-.price small{font-size:10px;opacity:.65;margin-right:2px}
-
-/* ============ MENU ============ */
-.menu-sec{background:var(--ink-2);border-block:1px solid var(--line)}
-.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:var(--gap);justify-content:center}
-.tab{
-  padding:11px 20px;border:1px solid var(--line);color:var(--bone-dim);
-  font-size:12px;letter-spacing:.13em;text-transform:uppercase;transition:.3s;
-  display:flex;align-items:center;gap:9px;
-}
-.tab em{font-family:var(--mono);font-size:9.5px;font-style:normal;opacity:.55}
-.tab:hover{color:var(--bone);border-color:rgba(201,162,74,.5)}
-.tab.on{background:var(--brass);color:#100D06;border-color:var(--brass)}
-.tab.on em{opacity:.65}
-
-.menu-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(14px,1.8vw,22px)}
-.dish{
-  display:flex;gap:16px;padding:16px;background:var(--ink-3);
-  border:1px solid rgba(246,243,236,.06);transition:.4s var(--ease);
-  animation:fadeUp .5s var(--ease) backwards;min-width:0;
-}
-@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}}
-.dish:hover{border-color:var(--brass);background:#232326}
-.dish-img{width:96px;height:96px;flex:none;overflow:hidden;border:1px solid var(--line)}
-.dish-img img{width:100%;height:100%;object-fit:cover;transition:transform .7s var(--ease)}
-.dish:hover .dish-img img{transform:scale(1.09)}
-.dish-b{flex:1;min-width:0;display:flex;flex-direction:column}
-.dish-t{display:flex;flex-wrap:wrap;justify-content:space-between;gap:2px 10px;
-  align-items:baseline;margin-bottom:5px;min-width:0}
-.dish-t h3{font-size:16.5px;font-weight:600;letter-spacing:0;text-wrap:balance}
-.dish-b p{font-size:12.5px;color:var(--bone-dim);line-height:1.45;margin-bottom:12px}
-.dish-add{
-  margin-top:auto;align-self:flex-start;
-  font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;
-  color:var(--brass);border:1px solid var(--line);padding:7px 13px;transition:.3s;
-}
-.dish-add:hover{background:var(--brass);color:#100D06;border-color:var(--brass)}
-.dish-add.done{background:#4ADE80;color:#0B0B0C;border-color:#4ADE80}
-.tag{
-  display:inline-block;font-family:var(--mono);font-size:8.5px;letter-spacing:.12em;text-transform:uppercase;
-  color:var(--brass);border:1px solid rgba(201,162,74,.45);padding:2px 6px;margin-left:8px;
-  vertical-align:middle;white-space:nowrap;transform:translateY(-1px);
+/* ---------- STRIP ---------- */
+var stripItems=["Charcoal fired daily","Fresh cut, never frozen","Wood-fired tandoor","Open till 1 am","Free delivery over Rs 2,000","Susan Road, Faisalabad"];
+var strip=$("#strip");
+if(strip){
+  var html="";
+  for(var s=0;s<2;s++){ for(var i=0;i<stripItems.length;i++){ html+="<span>"+stripItems[i]+"</span>"; } }
+  strip.innerHTML=html;
 }
 
-/* ============ OFFERS ============ */
-.offers{display:grid;grid-template-columns:1.6fr minmax(0,1fr) minmax(0,1fr);gap:clamp(14px,1.8vw,20px)}
-.offer{
-  position:relative;overflow:hidden;border:1px solid var(--line);
-  min-height:300px;display:flex;flex-direction:column;justify-content:flex-end;
-  padding:clamp(22px,3vw,36px);isolation:isolate;transition:.5s var(--ease);
-}
-.offer:hover{border-color:var(--brass)}
-.offer img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2;transition:transform 1s var(--ease)}
-.offer:hover img{transform:scale(1.06)}
-.offer::before{
-  content:"";position:absolute;inset:0;z-index:-1;
-  background:linear-gradient(180deg,rgba(11,11,12,.55) 0%,rgba(11,11,12,.72) 45%,rgba(11,11,12,.96) 100%);
-}
-.offer-tag{
-  align-self:flex-start;font-family:var(--mono);font-size:10px;letter-spacing:.2em;
-  text-transform:uppercase;background:var(--brass);color:#100D06;padding:6px 11px;margin-bottom:auto;
-}
-.offer h3{margin:20px 0 8px}
-.offer p{font-size:13.5px;color:var(--bone-dim);margin-bottom:16px;max-width:38ch}
-.offer .when{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;color:var(--brass);text-transform:uppercase;margin-bottom:14px;display:block}
-.offer--lg h3{font-size:clamp(26px,3.4vw,40px)}
-
-/* ============ GALLERY ============ */
-.gal{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));grid-template-rows:repeat(3,190px);gap:12px}
-.gal figure{overflow:hidden;position:relative;border:1px solid rgba(246,243,236,.07);cursor:pointer}
-.gal img{width:100%;height:100%;object-fit:cover;transition:transform .8s var(--ease),filter .5s}
-.gal figure:hover img{transform:scale(1.08)}
-.gal figure::after{
-  content:attr(data-cap);position:absolute;inset:auto 0 0 0;padding:14px 16px;
-  font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--brass-lt);
-  background:linear-gradient(180deg,transparent,rgba(11,11,12,.9));
-  opacity:0;transform:translateY(10px);transition:.4s var(--ease);
-}
-.gal figure:hover::after{opacity:1;transform:none}
-/* explicit placement: 4 x 3 grid, fully tiled, no gaps */
-.gal figure:nth-child(1){grid-column:1/2;grid-row:1/3}   /* tall left  */
-.gal figure:nth-child(2){grid-column:2/4;grid-row:1/2}   /* wide top   */
-.gal figure:nth-child(3){grid-column:4/5;grid-row:1/3}   /* tall right */
-.gal figure:nth-child(4){grid-column:2/3;grid-row:2/3}
-.gal figure:nth-child(5){grid-column:3/4;grid-row:2/3}
-.gal figure:nth-child(6){grid-column:1/3;grid-row:3/4}   /* wide low   */
-.gal figure:nth-child(7){grid-column:3/5;grid-row:3/4}   /* wide low   */
-
-/* ============ REVIEWS ============ */
-.rev-sec{background:var(--ink-2);border-block:1px solid var(--line)}
-.rev-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(14px,1.8vw,22px)}
-.rev{border:1px solid var(--line);padding:clamp(24px,3vw,34px);background:var(--ink);display:flex;flex-direction:column;transition:.4s var(--ease)}
-.rev:hover{border-color:var(--brass);transform:translateY(-4px)}
-.stars{display:flex;gap:3px;margin-bottom:18px}
-.stars svg{width:14px;height:14px;fill:var(--brass)}
-.rev blockquote{font-family:var(--display);font-size:clamp(16px,1.8vw,19px);line-height:1.5;font-weight:400;margin-bottom:22px;flex:1}
-.rev-who{display:flex;align-items:center;gap:13px;padding-top:20px;border-top:1px solid rgba(246,243,236,.08)}
-.av{width:40px;height:40px;flex:none;border-radius:50%;background:var(--ink-3);border:1px solid var(--brass);
-  display:grid;place-items:center;font-family:var(--display);font-size:14px;color:var(--brass)}
-.rev-who b{display:block;font-size:14px;font-weight:500;letter-spacing:.02em}
-.rev-who span{font-family:var(--mono);font-size:10px;letter-spacing:.1em;color:var(--bone-dim);text-transform:uppercase}
-
-/* ============ RESERVE / CONTACT ============ */
-.res-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:clamp(34px,5vw,70px);align-items:start}
-.info-list{display:grid;gap:2px;margin-top:34px;border-top:1px solid var(--line)}
-.info-list li{display:grid;grid-template-columns:120px 1fr;gap:18px;padding:17px 0;border-bottom:1px solid rgba(246,243,236,.08);align-items:start}
-.info-list dt,.info-list .k{font-family:var(--mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--brass);padding-top:3px}
-.info-list .v{font-size:14.5px;line-height:1.55}
-.info-list .v a{border-bottom:1px solid var(--line);transition:.3s;
-  display:inline-flex;align-items:center;min-height:32px}
-.info-list .v a:hover{color:var(--brass);border-color:var(--brass)}
-.map-link{
-  display:block;margin-top:26px;border:1px solid var(--line);overflow:hidden;position:relative;
-}
-.map-link img{width:100%;aspect-ratio:16/7;object-fit:cover;filter:grayscale(1) brightness(.55) contrast(1.1);transition:.6s var(--ease)}
-.map-link:hover img{filter:grayscale(.3) brightness(.72);transform:scale(1.03)}
-.map-link span{
-  position:absolute;inset:auto 0 0 0;padding:16px 20px;display:flex;justify-content:space-between;align-items:center;gap:14px;
-  font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;
-  background:linear-gradient(180deg,transparent,rgba(11,11,12,.94));color:var(--brass-lt);
+/* ---------- SIGNATURE ---------- */
+var sg=$("#sigGrid");
+if(sg){
+  sg.innerHTML=SIGS.map(function(x){
+    return '<article class="sig rv">'+
+      '<div class="sig-img"><img src="'+x.img+'" alt="'+x.n+'" loading="lazy">'+
+      '<span class="sig-rank">'+x.rank+'</span></div>'+
+      '<div class="sig-body"><h3>'+x.n+'</h3><p>'+x.d+'</p>'+
+      '<div class="sig-foot"><span class="price"><small>Rs</small> '+x.p.toLocaleString("en-PK")+'</span>'+
+      '<button class="btn btn-gold btn-sm add" data-id="'+x.id+'">Add to cart</button></div></div></article>';
+  }).join("");
 }
 
-.form-card{border:1px solid var(--line);background:var(--ink-2);padding:clamp(24px,3.4vw,40px)}
-@media(min-width:901px){.form-card{position:sticky;top:96px}}
-.form-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;margin-top:26px}
-.fld{display:flex;flex-direction:column;gap:7px;min-width:0}
-.fld.full{grid-column:1/-1}
-.fld label{font-family:var(--mono);font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--bone-dim)}
-.fld input,.fld select{
-  width:100%;background:var(--ink);border:1px solid rgba(246,243,236,.14);
-  padding:13px 14px;font-size:14.5px;font-weight:300;transition:.3s;border-radius:var(--r);
-  color:var(--bone);font-family:var(--body);
-}
-.fld input::placeholder{color:rgba(246,243,236,.28)}
-.fld input:focus,.fld select:focus{border-color:var(--brass);outline:none;background:#0E0E10}
-.fld select{appearance:none;cursor:pointer;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23C9A24A' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
-  background-repeat:no-repeat;background-position:right 14px center;background-size:11px;padding-right:36px}
-.fld select option{background:var(--ink);color:var(--bone)}
-.fld input[type=date],.fld input[type=time]{color-scheme:dark}
-.fld.bad input,.fld.bad select{border-color:var(--ember)}
-.err{font-family:var(--mono);font-size:10px;letter-spacing:.08em;color:var(--ember);min-height:0;display:none}
-.fld.bad .err{display:block}
-.form-note{font-family:var(--mono);font-size:10px;letter-spacing:.1em;color:var(--bone-dim);text-transform:uppercase;margin-top:16px;text-align:center}
-.ok-msg{
-  display:none;margin-top:20px;border:1px solid #4ADE80;background:rgba(74,222,128,.09);
-  padding:18px 20px;gap:13px;align-items:flex-start;
-}
-.ok-msg.show{display:flex;animation:fadeUp .45s var(--ease)}
-.ok-msg svg{width:20px;height:20px;flex:none;stroke:#4ADE80;fill:none;stroke-width:2;margin-top:2px}
-.ok-msg b{display:block;font-size:14px;font-weight:500;letter-spacing:.04em;margin-bottom:3px}
-.ok-msg p{font-size:13px;color:var(--bone-dim);line-height:1.5}
-
-/* ============ FOOTER ============ */
-.ftr{border-top:1px solid var(--line);background:var(--ink-2);padding-top:clamp(50px,7vw,84px)}
-.ftr-grid{display:grid;grid-template-columns:1.5fr minmax(0,1fr) minmax(0,1fr) 1.2fr;gap:clamp(28px,4vw,50px);padding-bottom:46px}
-.ftr h4{font-family:var(--mono);font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--brass);margin-bottom:20px;font-weight:500}
-.ftr-brand p{font-size:14px;color:var(--bone-dim);margin-top:18px;max-width:34ch;line-height:1.6}
-.ftr ul{display:grid;gap:11px}
-.ftr ul a{font-size:14px;color:var(--bone-dim);transition:.3s;display:inline-block;
-  padding-block:5px;min-height:32px;display:inline-flex;align-items:center}
-.ftr ul a:hover{color:var(--brass);transform:translateX(3px)}
-.socials{display:flex;gap:9px;margin-top:22px}
-.socials a{width:38px;height:38px;border:1px solid var(--line);display:grid;place-items:center;transition:.3s}
-.socials a:hover{border-color:var(--brass);background:rgba(201,162,74,.1);transform:translateY(-3px)}
-.socials svg{width:16px;height:16px;fill:var(--bone-dim);transition:.3s}
-.socials a:hover svg{fill:var(--brass)}
-.ftr-bot{
-  border-top:1px solid rgba(246,243,236,.08);padding-block:24px;
-  display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;align-items:center;
-  font-family:var(--mono);font-size:10.5px;letter-spacing:.13em;color:rgba(246,243,236,.4);text-transform:uppercase;
+/* ---------- REVIEWS ---------- */
+var rg=$("#revGrid");
+if(rg){
+  var star='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.9 6.3 6.9.8-5.1 4.7 1.4 6.8L12 17.3 5.9 20.6l1.4-6.8L2.2 9.1l6.9-.8z"/></svg>';
+  rg.innerHTML=REVIEWS.map(function(x){
+    return '<article class="rev"><div class="stars" aria-label="5 out of 5 stars">'+star+star+star+star+star+'</div>'+
+      '<blockquote>&ldquo;'+x.q+'&rdquo;</blockquote>'+
+      '<div class="rev-who"><span class="av" aria-hidden="true">'+x.i+'</span>'+
+      '<div><b>'+x.n+'</b><span>'+x.m+'</span></div></div></article>';
+  }).join("");
 }
 
-/* ============ CART DRAWER ============ */
-.scrim{position:fixed;inset:0;background:rgba(5,5,6,.7);backdrop-filter:blur(3px);z-index:940;opacity:0;visibility:hidden;transition:.4s}
-.scrim.on{opacity:1;visibility:visible}
-.cart{
-  position:fixed;top:0;right:0;bottom:0;width:min(420px,100%);z-index:950;
-  background:var(--ink-2);border-left:1px solid var(--line);
-  transform:translateX(100%);transition:transform .45s var(--ease);
-  display:flex;flex-direction:column;
+/* ---------- MENU TABS ---------- */
+var tabs=$("#tabs"), grid=$("#menuGrid"), active=CATS[0].k;
+function counts(k){ return MENU.filter(function(m){return m.cat===k}).length; }
+if(tabs){
+  tabs.innerHTML=CATS.map(function(c){
+    return '<button class="tab'+(c.k===active?' on':'')+'" role="tab" data-cat="'+c.k+'" aria-selected="'+(c.k===active)+'">'+
+      c.l+' <em>'+counts(c.k)+'</em></button>';
+  }).join("");
 }
-.cart.open{transform:none}
-.cart-hd{display:flex;justify-content:space-between;align-items:center;gap:14px;padding:24px var(--pad);border-bottom:1px solid var(--line);flex:none}
-.cart-hd h3{font-size:19px}
-.cart-hd em{font-family:var(--mono);font-size:10px;font-style:normal;color:var(--brass);letter-spacing:.14em;display:block;margin-top:3px}
-.xbtn{width:36px;height:36px;border:1px solid var(--line);display:grid;place-items:center;flex:none;transition:.3s;font-size:17px;line-height:1;color:var(--bone-dim)}
-.xbtn:hover{border-color:var(--brass);color:var(--brass)}
-.cart-body{flex:1;overflow-y:auto;overflow-x:hidden;padding:var(--pad);
-  display:grid;grid-template-columns:minmax(0,1fr);gap:14px;align-content:start}
-.cart-empty{text-align:center;padding:56px 0;color:var(--bone-dim)}
-.cart-empty svg{width:44px;height:44px;stroke:var(--line);fill:none;stroke-width:1.2;margin:0 auto 18px}
-.cart-empty p{font-size:14px;margin-bottom:22px}
-.ci{display:flex;gap:13px;align-items:center;border:1px solid rgba(246,243,236,.08);
-  padding:11px;background:var(--ink);min-width:0}
-.ci img{width:62px;height:62px;object-fit:cover;flex:none;border:1px solid var(--line)}
-.ci-b{flex:1;min-width:0}
-.ci-b b{display:block;font-size:14px;font-weight:500;line-height:1.3;margin-bottom:3px;
-  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.ci-b span{font-family:var(--mono);font-size:12px;color:var(--brass)}
-.qty{display:flex;align-items:center;gap:0;border:1px solid var(--line);flex:none}
-.qty button{width:28px;height:28px;display:grid;place-items:center;color:var(--brass);font-size:15px;line-height:1;transition:.25s}
-.qty button:hover{background:var(--brass);color:#100D06}
-.qty b{width:26px;text-align:center;font-family:var(--mono);font-size:12.5px;font-weight:500}
-.cart-ft{flex:none;padding:var(--pad);border-top:1px solid var(--line);background:var(--ink-3)}
-.cart-ft dl{display:grid;gap:9px;margin-bottom:18px}
-.cart-ft dl div{display:flex;justify-content:space-between;font-size:13.5px;color:var(--bone-dim)}
-.cart-ft dl div.tot{padding-top:12px;border-top:1px solid var(--line);color:var(--bone);font-size:16px;align-items:baseline}
-.cart-ft dl div.tot dd{font-family:var(--mono);font-size:19px;color:var(--brass);font-weight:500}
-.cart-ft dl dd{font-family:var(--mono)}
+function drawMenu(){
+  if(!grid) return;
+  var list=MENU.filter(function(m){return m.cat===active});
+  grid.innerHTML=list.map(function(m,i){
+    return '<article class="dish" style="animation-delay:'+(i*45)+'ms">'+
+      '<div class="dish-img"><img src="'+m.img+'" alt="'+m.n+'" loading="lazy"></div>'+
+      '<div class="dish-b"><div class="dish-t"><h3>'+m.n+(m.tag?'<span class="tag">'+m.tag+'</span>':'')+'</h3>'+
+      '<span class="price">'+rs(m.p)+'</span></div>'+
+      '<p>'+m.d+'</p>'+
+      '<button class="dish-add add" data-id="'+m.id+'">Add to cart</button></div></article>';
+  }).join("");
+}
+drawMenu();
+if(tabs) tabs.addEventListener("click",function(e){
+  var b=e.target.closest(".tab"); if(!b) return;
+  active=b.dataset.cat;
+  $$(".tab",tabs).forEach(function(t){
+    var on=t===b; t.classList.toggle("on",on); t.setAttribute("aria-selected",on);
+  });
+  drawMenu();
+});
 
-/* toast */
-.toast{
-  position:fixed;left:50%;bottom:26px;transform:translate(-50%,140%);z-index:980;
-  background:var(--ink-3);border:1px solid var(--brass);padding:13px 22px;
-  font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--brass-lt);
-  transition:transform .45s var(--ease);max-width:calc(100vw - 32px);text-align:center;
-}
-.toast.on{transform:translate(-50%,0)}
-
-/* reveal on scroll */
-.rv{opacity:0;transform:translateY(26px);transition:opacity .8s var(--ease),transform .8s var(--ease)}
-.rv.in{opacity:1;transform:none}
-
-/* ============ RESPONSIVE ============ */
-@media(max-width:1080px){
-  .hero-grid{grid-template-columns:1fr}
-  .ember-card{max-width:360px}
-  .sig-grid,.menu-grid,.rev-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .offers{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
-  .offer--lg{grid-column:1/-1;min-height:270px}
-  .ftr-grid{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:36px}
-}
-@media(max-width:1199px){
-  .nav,.hdr-act .btn{display:none}
-  .burger{display:flex}
-}
-@media(max-width:900px){
-  .about-grid,.res-grid{grid-template-columns:1fr}
-  .about-imgs{max-width:520px}
-  .gal{grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:none;grid-auto-rows:160px}
-  .gal figure{grid-column:auto!important;grid-row:auto!important}
-  .gal figure:nth-child(1),
-  .gal figure:nth-child(6){grid-column:1/-1!important}
-}
-@media(max-width:640px){
-  h2{font-size:clamp(29px,8vw,40px)}
-  .hero{min-height:92svh}
-  .hero h1{font-size:clamp(40px,12.5vw,62px)}
-  .sig-grid,.menu-grid,.rev-grid,.offers{grid-template-columns:minmax(0,1fr)}
-  .offer{min-height:250px}
-  .stats{grid-template-columns:minmax(0,1fr);gap:0}
-  .stats li{padding:15px 0;border-bottom:1px solid rgba(246,243,236,.08);display:flex;align-items:baseline;justify-content:space-between;gap:16px}
-  .stats li:last-child{border:0}
-  .stats span{margin-top:0}
-  .form-grid{grid-template-columns:minmax(0,1fr)}
-  .info-list li{grid-template-columns:1fr;gap:5px}
-  .ftr-grid{grid-template-columns:minmax(0,1fr);gap:34px}
-  .ftr-bot{justify-content:center;text-align:center;font-size:9.5px}
-  .sec-head{align-items:flex-start}
-  .dish-img{width:78px;height:78px}
-  .badge{width:92px;height:92px}
-  .badge b{font-size:23px}
-  .tabs{justify-content:flex-start;flex-wrap:nowrap;overflow-x:auto;
-    margin-inline:calc(var(--pad)*-1);padding-inline:var(--pad);padding-bottom:8px;
-    scrollbar-width:none}
-  .tabs::-webkit-scrollbar{display:none}
-  .tab{flex:none}
-}
-@media(max-width:420px){
-  .logo-tx span{display:none}
-  .logo-mk{width:34px;height:34px;font-size:13px}
-  .logo{gap:9px}
-}
-@media(max-width:400px){
-  .btn{padding:14px 20px;font-size:11.5px}
-  .hero-cta .btn{width:100%}
-}
-/* --- short viewports: height is the limiting axis, not width --- */
-@media(max-height:560px){
-  .hero{min-height:auto}
-  .hero-in{padding-block:92px 26px}
-  .hero h1{font-size:clamp(30px,6.4vw,46px);margin-bottom:12px}
-  .hero-tag{margin-bottom:12px}
-  .hero .lede{font-size:14px;line-height:1.5;margin-bottom:18px;max-width:52ch}
-  .hero-cta{gap:10px}
-  .hero-cta .btn{padding:12px 22px}
-}
-@media(max-height:560px) and (orientation:landscape) and (min-width:660px){
-  /* keep the status card beside the copy instead of stacking it */
-  .hero-grid{grid-template-columns:1fr auto;align-items:center}
-  .ember-card{padding:16px 20px;min-width:214px}
-  .ember-card dl{gap:7px}
-  .ember-card div{padding-bottom:7px}
-  .ember-row{margin-bottom:12px;padding-bottom:10px}
-}
-@media(max-height:430px){
-  .hero-in{padding-block:84px 20px}
-  .hero .lede{display:none}
-  .hero h1{font-size:clamp(28px,5.6vw,40px)}
+/* ---------- TOAST ---------- */
+var toastEl=$("#toast"), tT;
+function toast(msg){
+  if(!toastEl) return;
+  toastEl.textContent=msg; toastEl.classList.add("on");
+  clearTimeout(tT); tT=setTimeout(function(){toastEl.classList.remove("on")},2300);
 }
 
-@media(prefers-reduced-motion:reduce){
-  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
-  html{scroll-behavior:auto}
-  /* content must never depend on motion to become visible */
-  .rv{opacity:1!important;transform:none!important}
-  .hero-bg img{animation:none!important;transform:none!important}
-  .strip-tr{animation:none!important}
-  .drawer a{opacity:1!important;transform:none!important;animation:none!important}
-  .dish{animation:none!important}
-  .ember-dot{animation:none!important}
+/* ---------- CART ---------- */
+var cart=[];
+var cartEl=$("#cart"), scrim=$("#scrim"), body=$("#cartBody"), ft=$("#cartFt");
+var DELIVERY=120, FREE_OVER=2000;
+
+function find(id){ var a=MENU.filter(function(m){return m.id===id}); return a[0]; }
+function subtotal(){ return cart.reduce(function(t,c){return t+c.p*c.q},0); }
+
+function addItem(id){
+  var m=find(id); if(!m) return;
+  var ex=cart.filter(function(c){return c.id===id})[0];
+  if(ex) ex.q++;
+  else cart.push({id:id,n:m.n,p:m.p,img:m.img,q:1});
+  render(); toast(m.n+" added");
 }
+function setQty(id,delta){
+  var ex=cart.filter(function(c){return c.id===id})[0]; if(!ex) return;
+  ex.q+=delta;
+  if(ex.q<=0) cart=cart.filter(function(c){return c.id!==id});
+  render();
+}
+
+function render(){
+  var n=cart.reduce(function(t,c){return t+c.q},0);
+  var cnt=$("#cartCnt");
+  cnt.textContent=n; cnt.classList.toggle("show",n>0);
+  $("#cartMeta").textContent=n+(n===1?" item":" items");
+
+  if(!cart.length){
+    body.innerHTML='<div class="cart-empty">'+
+      '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4h2.2l2.1 11.2a2 2 0 0 0 2 1.6h7.6a2 2 0 0 0 2-1.6L20.5 8H6.2"/><circle cx="10" cy="20" r="1.4"/><circle cx="17" cy="20" r="1.4"/></svg>'+
+      '<p>Nothing here yet. Pick something off the menu.</p>'+
+      '<button class="btn btn-ghost btn-sm" id="goMenu">Browse the menu</button></div>';
+    ft.hidden=true;
+    return;
+  }
+  ft.hidden=false;
+  body.innerHTML=cart.map(function(c){
+    return '<div class="ci"><img src="'+c.img+'" alt="'+c.n+'">'+
+      '<div class="ci-b"><b>'+c.n+'</b><span>'+rs(c.p*c.q)+'</span></div>'+
+      '<div class="qty"><button data-d="-1" data-id="'+c.id+'" aria-label="Reduce quantity of '+c.n+'">−</button>'+
+      '<b>'+c.q+'</b>'+
+      '<button data-d="1" data-id="'+c.id+'" aria-label="Increase quantity of '+c.n+'">+</button></div></div>';
+  }).join("");
+
+  var sub=subtotal();
+  var del=sub>=FREE_OVER?0:DELIVERY;
+  $("#sub").textContent=rs(sub);
+  $("#del").textContent=del===0?"Free":rs(del);
+  $("#delLbl").textContent=del===0?"Delivery (over Rs 2,000)":"Delivery";
+  $("#tot").textContent=rs(sub+del);
+}
+
+function openCart(){
+  cartEl.classList.add("open"); scrim.classList.add("on");
+  cartEl.setAttribute("aria-hidden","false"); document.body.style.overflow="hidden";
+}
+function closeCart(){
+  cartEl.classList.remove("open"); scrim.classList.remove("on");
+  cartEl.setAttribute("aria-hidden","true"); document.body.style.overflow="";
+}
+$("#cartOpen").addEventListener("click",openCart);
+$("#cartClose").addEventListener("click",closeCart);
+scrim.addEventListener("click",function(){closeCart();closeDrawer()});
+
+body.addEventListener("click",function(e){
+  var q=e.target.closest("[data-d]");
+  if(q){ setQty(q.dataset.id, parseInt(q.dataset.d,10)); return; }
+  if(e.target.id==="goMenu"){ closeCart(); document.getElementById("menu").scrollIntoView({behavior:"smooth"}); }
+});
+
+document.addEventListener("click",function(e){
+  var a=e.target.closest(".add"); if(!a) return;
+  addItem(a.dataset.id);
+  if(a.classList.contains("dish-add")){
+    a.classList.add("done"); var old=a.textContent; a.textContent="Added ✓";
+    setTimeout(function(){a.classList.remove("done");a.textContent=old},1200);
+  }
+});
+
+$("#placeBtn").addEventListener("click",function(){
+  var sub=subtotal(); var del=sub>=FREE_OVER?0:DELIVERY;
+  var id="MM-"+Math.floor(100000+Math.random()*899999);
+  body.innerHTML='<div class="cart-empty"><svg viewBox="0 0 24 24" style="stroke:#4ADE80" aria-hidden="true"><path d="M20 6L9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"/></svg>'+
+    '<p style="color:var(--bone);font-size:16px;margin-bottom:8px"><b>Order placed</b></p>'+
+    '<p style="font-family:var(--mono);font-size:12px;letter-spacing:.12em;color:var(--brass)">'+id+'</p>'+
+    '<p style="margin-top:14px">Total '+rs(sub+del)+'. We will call you on the number you order from to confirm the address, usually inside five minutes.</p>'+
+    '<button class="btn btn-ghost btn-sm" id="goMenu">Order something else</button></div>';
+  ft.hidden=true; cart=[];
+  $("#cartCnt").classList.remove("show"); $("#cartCnt").textContent="0"; $("#cartMeta").textContent="0 items";
+  toast("Order "+id+" placed");
+});
+render();
+
+/* ---------- HEADER / DRAWER ---------- */
+var hdr=$("#hdr"), burger=$("#burger"), drawer=$("#drawer");
+function onScroll(){ hdr.classList.toggle("stuck", window.scrollY>24); }
+onScroll(); window.addEventListener("scroll",onScroll,{passive:true});
+
+function openDrawer(){
+  drawer.classList.add("open"); burger.classList.add("x");
+  burger.setAttribute("aria-expanded","true"); drawer.setAttribute("aria-hidden","false");
+  document.body.style.overflow="hidden";
+  $$("#drawer a").forEach(function(a,i){ a.style.animationDelay=(60+i*45)+"ms" });
+}
+function closeDrawer(){
+  drawer.classList.remove("open"); burger.classList.remove("x");
+  burger.setAttribute("aria-expanded","false"); drawer.setAttribute("aria-hidden","true");
+  document.body.style.overflow="";
+}
+burger.addEventListener("click",function(){
+  drawer.classList.contains("open")?closeDrawer():openDrawer();
+});
+$$("#drawer a").forEach(function(a){ a.addEventListener("click",closeDrawer) });
+document.addEventListener("keydown",function(e){
+  if(e.key==="Escape"){ closeDrawer(); closeCart(); }
+});
+var NAV_BP=1199;   /* must match the CSS breakpoint in style.css */
+window.addEventListener("resize",function(){
+  if(window.innerWidth>NAV_BP && drawer.classList.contains("open")) closeDrawer();
+});
+
+/* active nav link */
+var navLinks=$$("#nav a");
+var secs=navLinks.map(function(a){ return document.querySelector(a.getAttribute("href")) }).filter(Boolean);
+if("IntersectionObserver" in window && secs.length){
+  var so=new IntersectionObserver(function(en){
+    en.forEach(function(e){
+      if(e.isIntersecting){
+        navLinks.forEach(function(l){ l.classList.toggle("on", l.getAttribute("href")==="#"+e.target.id) });
+      }
+    });
+  },{rootMargin:"-45% 0px -50% 0px"});
+  secs.forEach(function(s){ so.observe(s) });
+}
+
+/* ---------- REVEAL ---------- */
+if("IntersectionObserver" in window){
+  var ro=new IntersectionObserver(function(en,o){
+    en.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add("in"); o.unobserve(e.target); } });
+  },{threshold:.08,rootMargin:"0px 0px -40px 0px"});
+  $$(".rv").forEach(function(el){ ro.observe(el) });
+}else{ $$(".rv").forEach(function(el){ el.classList.add("in") }); }
+
+/* ---------- RESERVATION FORM ---------- */
+var form=$("#resForm");
+var dateEl=$("#rDate"), timeEl=$("#rTime"), guestEl=$("#rGuests");
+
+/* time options 12:00pm -> 12:30am, 30 min steps */
+(function(){
+  var out=[];
+  for(var h=12;h<=24;h++){
+    for(var m=0;m<60;m+=30){
+      if(h===24 && m>30) break;
+      var hh=h%24, ap=hh>=12&&hh<24?"pm":"am", disp=hh%12===0?12:hh%12;
+      var val=("0"+hh).slice(-2)+":"+("0"+m).slice(-2);
+      out.push('<option value="'+val+'">'+disp+":"+("0"+m).slice(-2)+" "+ap+"</option>");
+    }
+  }
+  timeEl.insertAdjacentHTML("beforeend",out.join(""));
+})();
+
+/* guests 1-10 */
+(function(){
+  var out=[];
+  for(var i=1;i<=10;i++) out.push('<option value="'+i+'">'+i+(i===1?" guest":" guests")+(i===10?" (max online)":"")+'</option>');
+  guestEl.insertAdjacentHTML("beforeend",out.join(""));
+})();
+
+/* date bounds: today .. +60 days */
+(function(){
+  var t=new Date(), pad=function(n){return ("0"+n).slice(-2)};
+  var iso=function(d){return d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate())};
+  dateEl.min=iso(t);
+  var max=new Date(t.getTime()+60*86400000);
+  dateEl.max=iso(max);
+})();
+
+function fail(fld,errId,msg){
+  document.getElementById(fld).closest(".fld").classList.add("bad");
+  document.getElementById(errId).textContent=msg;
+}
+function clearErr(el){
+  var f=el.closest(".fld"); if(f) f.classList.remove("bad");
+}
+["rName","rPhone","rDate","rTime","rGuests"].forEach(function(id){
+  var el=document.getElementById(id);
+  el.addEventListener("input",function(){clearErr(el)});
+  el.addEventListener("change",function(){clearErr(el)});
+});
+
+form.addEventListener("submit",function(e){
+  e.preventDefault();
+  $$(".fld",form).forEach(function(f){f.classList.remove("bad")});
+  $("#resOk").classList.remove("show");
+
+  var ok=true;
+  var name=$("#rName").value.trim();
+  var phoneRaw=$("#rPhone").value.trim();
+  var phone=phoneRaw.replace(/[\s\-()]/g,"");
+
+  if(name.length<3){ fail("rName","eName","Enter your full name"); ok=false; }
+  else if(!/^[A-Za-z\u0600-\u06FF.'\s-]+$/.test(name)){ fail("rName","eName","Letters only, please"); ok=false; }
+
+  if(!phone){ fail("rPhone","ePhone","Enter a phone number"); ok=false; }
+  else if(!/^(?:\+92|0092|0)?3\d{9}$/.test(phone) && !/^(?:\+92|0)?41\d{7,8}$/.test(phone)){
+    fail("rPhone","ePhone","Use a valid Pakistani number, e.g. 0300 1234567"); ok=false;
+  }
+
+  if(!dateEl.value){ fail("rDate","eDate","Pick a date"); ok=false; }
+  else{
+    var today=new Date(); today.setHours(0,0,0,0);
+    var picked=new Date(dateEl.value+"T00:00:00");
+    if(isNaN(picked.getTime())){ fail("rDate","eDate","Pick a valid date"); ok=false; }
+    else if(picked<today){ fail("rDate","eDate","That date has passed"); ok=false; }
+  }
+
+  if(!timeEl.value){ fail("rTime","eTime","Pick a time"); ok=false; }
+  else if(dateEl.value){
+    var now=new Date();
+    var slot=new Date(dateEl.value+"T"+(timeEl.value==="24:00"?"23:59":timeEl.value)+":00");
+    if(timeEl.value>="24:00"||parseInt(timeEl.value,10)===24){ slot.setDate(slot.getDate()+1); }
+    if(slot.getTime()-now.getTime() < 45*60000 && slot.toDateString()===now.toDateString()){
+      fail("rTime","eTime","Book at least 45 minutes ahead, or call us"); ok=false;
+    }
+  }
+
+  if(!guestEl.value){ fail("rGuests","eGuests","Choose party size"); ok=false; }
+
+  if(!ok){ $(".fld.bad input, .fld.bad select").focus(); return; }
+
+  var ref="MMB-"+Math.floor(1000+Math.random()*8999);
+  var dObj=new Date(dateEl.value+"T00:00:00");
+  var pretty=dObj.toLocaleDateString("en-GB",{weekday:"long",day:"numeric",month:"long"});
+  var tLabel=timeEl.options[timeEl.selectedIndex].textContent;
+
+  $("#okTitle").textContent="Table reserved · "+ref;
+  $("#okBody").textContent=name+", your table for "+guestEl.value+" is held for "+pretty+" at "+tLabel+
+    ". We will call "+phoneRaw+" within 15 minutes to confirm. The table is held 20 minutes past your time.";
+  $("#resOk").classList.add("show");
+  form.reset();
+  toast("Reservation "+ref+" received");
+  $("#resOk").scrollIntoView({behavior:"smooth",block:"center"});
+});
+
+/* ---------- YEAR ---------- */
+$("#yr").textContent=new Date().getFullYear();
+
+/* ---------- SMOOTH ANCHORS (safety for old browsers) ---------- */
+$$('a[href^="#"]').forEach(function(a){
+  a.addEventListener("click",function(e){
+    var id=a.getAttribute("href");
+    if(id.length<2) return;
+    var t=document.querySelector(id);
+    if(!t) return;
+    e.preventDefault();
+    closeDrawer(); closeCart();
+    var top=t.getBoundingClientRect().top+window.scrollY-(window.innerWidth>NAV_BP?70:66);
+    window.scrollTo({top:top,behavior:"smooth"});
+  });
+});
+})();
