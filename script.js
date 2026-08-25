@@ -1,387 +1,423 @@
- <!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MM BROTHER RESTAURANT — Faisalabad</title>
-<meta name="description" content="MM BROTHER RESTAURANT, Faisalabad. Charcoal grill, slow-cooked karahi and clay-oven bread. Dine in, order online or reserve a table.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700;9..144,900&family=Jost:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css">
-</head>
-<body>
-<!-- ================= HEADER ================= -->
-<header class="hdr" id="hdr">
-  <div class="wrap hdr-in">
-    <a href="#top" class="logo" aria-label="MM Brother Restaurant, back to top">
-      <span class="logo-mk">MM</span>
-      <span class="logo-tx"><b>MM BROTHER</b><span>Restaurant · Faisalabad</span></span>
-    </a>
+ (function(){
+"use strict";
+var $=function(s,c){return (c||document).querySelector(s)};
+var $$=function(s,c){return Array.prototype.slice.call((c||document).querySelectorAll(s))};
+var rs=function(n){return "Rs "+n.toLocaleString("en-PK")};
 
-    <nav class="nav" id="nav" aria-label="Main">
-      <a href="#about">About</a>
-      <a href="#signature">Signature</a>
-      <a href="#menu">Menu</a>
-      <a href="#offers">Offers</a>
-      <a href="#gallery">Gallery</a>
-      <a href="#reviews">Reviews</a>
-      <a href="#visit">Visit</a>
-    </nav>
+/* ---------- DATA ---------- */
+var IMG={
+  seekh:"https://images.unsplash.com/photo-1599487488170-d11ec9c172f0?q=80&w=800&auto=format&fit=crop",
+  karahi:"https://images.unsplash.com/photo-1631452180519-c014fe946bc7?q=80&w=800&auto=format&fit=crop",
+  tikka:"https://images.unsplash.com/photo-1610057099443-fde8c4d50f91?q=80&w=800&auto=format&fit=crop",
+  boti:"https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=800&auto=format&fit=crop",
+  malai:"https://images.unsplash.com/photo-1567188040759-fb8a883dc6d8?q=80&w=800&auto=format&fit=crop",
+  chops:"https://images.unsplash.com/photo-1558030006-450675393462?q=80&w=800&auto=format&fit=crop",
+  nihari:"https://images.unsplash.com/photo-1585937421612-70a008356fbe?q=80&w=800&auto=format&fit=crop",
+  handi:"https://images.unsplash.com/photo-1565557623262-b51c2513a641?q=80&w=800&auto=format&fit=crop",
+  daal:"https://images.unsplash.com/photo-1546833999-b9f581a1996d?q=80&w=800&auto=format&fit=crop",
+  qorma:"https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?q=80&w=800&auto=format&fit=crop",
+  biryani:"https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?q=80&w=800&auto=format&fit=crop",
+  pulao:"https://images.unsplash.com/photo-1596797038530-2c107229654b?q=80&w=800&auto=format&fit=crop",
+  naan:"https://images.unsplash.com/photo-1601050690597-df0568f70950?q=80&w=800&auto=format&fit=crop",
+  roti:"https://images.unsplash.com/photo-1626074353765-517a681e40be?q=80&w=800&auto=format&fit=crop",
+  paratha:"https://images.unsplash.com/photo-1619221882220-947b3d3c8861?q=80&w=800&auto=format&fit=crop",
+  raita:"https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?q=80&w=800&auto=format&fit=crop",
+  kheer:"https://images.unsplash.com/photo-1488477181946-6428a0291777?q=80&w=800&auto=format&fit=crop",
+  gulab:"https://images.unsplash.com/photo-1606491956689-2ea866880c84?q=80&w=800&auto=format&fit=crop",
+  falooda:"https://images.unsplash.com/photo-1497534446932-c925b458314e?q=80&w=800&auto=format&fit=crop",
+  lassi:"https://images.unsplash.com/photo-1553530666-ba11a7da3888?q=80&w=800&auto=format&fit=crop",
+  chai:"https://images.unsplash.com/photo-1571934811356-5cc061b6821f?q=80&w=800&auto=format&fit=crop",
+  soda:"https://images.unsplash.com/photo-1437418747212-8d9709afab22?q=80&w=800&auto=format&fit=crop"
+};
 
-    <div class="hdr-act">
-      <button class="cart-btn" id="cartOpen" aria-label="Open cart">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4h2.2l2.1 11.2a2 2 0 0 0 2 1.6h7.6a2 2 0 0 0 2-1.6L20.5 8H6.2"/><circle cx="10" cy="20" r="1.4"/><circle cx="17" cy="20" r="1.4"/></svg>
-        <span class="cart-cnt" id="cartCnt">0</span>
-      </button>
-      <a href="#reserve" class="btn btn-gold btn-sm">Reserve a table</a>
-      <button class="burger" id="burger" aria-label="Open menu" aria-expanded="false" aria-controls="drawer">
-        <i></i><i></i><i></i>
-      </button>
-    </div>
-  </div>
-</header>
+var MENU=[
+ {id:"m1", cat:"grill", n:"Beef Seekh Kebab", d:"Hand-minced beef, green chilli and roasted coriander, pressed onto skewers and cooked straight over coals.", p:640, img:IMG.seekh, tag:"Best seller"},
+ {id:"m2", cat:"grill", n:"Chicken Malai Boti", d:"Cream and cheddar marinade held overnight, grilled soft with a light char on the edges.", p:720, img:IMG.malai},
+ {id:"m3", cat:"grill", n:"Mutton Champ", d:"Six rib chops in a yoghurt and papaya marinade, finished with lemon and black pepper.", p:1290, img:IMG.chops, tag:"Chef's pick"},
+ {id:"m4", cat:"grill", n:"Chicken Tikka (Half)", d:"Bone-in leg and thigh, deep red masala, twenty minutes over the pit. Served with naan.", p:480, img:IMG.tikka},
+ {id:"m5", cat:"grill", n:"Beef Boti", d:"Cubes of undercut in a dry garam masala rub, skewered with onion and capsicum.", p:790, img:IMG.boti},
+ {id:"m6", cat:"grill", n:"Mixed Grill Platter", d:"Seekh, malai boti, tikka and champ on one tray with mint chutney, salad and four rotis.", p:2150, img:IMG.boti, tag:"For 3–4"},
 
-<!-- mobile drawer -->
-<div class="drawer" id="drawer" aria-hidden="true">
-  <a href="#about"><em>01</em>About</a>
-  <a href="#signature"><em>02</em>Signature</a>
-  <a href="#menu"><em>03</em>Menu</a>
-  <a href="#offers"><em>04</em>Offers</a>
-  <a href="#gallery"><em>05</em>Gallery</a>
-  <a href="#reviews"><em>06</em>Reviews</a>
-  <a href="#visit"><em>07</em>Visit</a>
-  <div class="drawer-foot">
-    <a href="#reserve" class="btn btn-gold">Reserve a table</a>
-    <a href="#menu" class="btn btn-ghost">Order now</a>
-    <p class="drawer-meta">
-      Susan Road, Madina Town, Faisalabad<br>
-      Daily · 12:00 pm — 1:00 am<br>
-      <a href="tel:+924118765432">+92 41 1876 5432</a>
-    </p>
-  </div>
-</div>
+ {id:"m7", cat:"karahi", n:"Mutton Karahi (1 kg)", d:"Slow cooked in the wok for fifty minutes with tomato, ginger and whole black pepper.", p:2680, img:IMG.karahi, tag:"Signature"},
+ {id:"m8", cat:"karahi", n:"Chicken White Karahi (1 kg)", d:"No tomato, no colour — just yoghurt, cream, green chilli and a lot of black pepper.", p:1740, img:IMG.handi},
+ {id:"m9", cat:"karahi", n:"Beef Nihari", d:"Shank simmered from midnight, served with ginger julienne, lemon and fried onion.", p:690, img:IMG.nihari, tag:"Limited daily"},
+ {id:"m10", cat:"karahi", n:"Chicken Handi", d:"Boneless chicken in a sealed clay pot with cashew and cream. Rich and mild.", p:1180, img:IMG.handi},
+ {id:"m11", cat:"karahi", n:"Daal Makhani", d:"Black lentils on low heat for nine hours, finished with butter and a smoke of coal.", p:480, img:IMG.daal},
+ {id:"m12", cat:"karahi", n:"Mutton Qorma", d:"Brown onion and yoghurt base, cardamom-forward, the way it is made at weddings here.", p:1320, img:IMG.qorma},
 
-<!-- ================= HERO ================= -->
-<main id="top">
-<section class="hero" aria-label="Welcome">
-  <div class="hero-bg">
-    <img src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?q=80&w=2000&auto=format&fit=crop" alt="Charcoal grill flaring under seekh kebabs at MM Brother Restaurant" fetchpriority="high">
-  </div>
-  <div class="wrap hero-in">
-    <div class="hero-grid">
-      <div>
-        <p class="hero-tag">Est. 2009 · Susan Road · Faisalabad</p>
-        <h1><span>Cooked over</span><span class="gold">real charcoal.</span></h1>
-        <p class="lede">Two brothers, one coal pit, and a menu that has not needed a shortcut since 2009. Slow karahi, hand-pressed seekh, and clay-oven bread pulled to order.</p>
-        <div class="hero-cta">
-          <a href="#menu" class="btn btn-gold">View menu</a>
-          <a href="#reserve" class="btn btn-ghost">Reserve a table</a>
-        </div>
-      </div>
+ {id:"m13", cat:"rice", n:"Chicken Biryani", d:"Long-grain sella layered with chicken masala and kewra, sealed and steamed to order.", p:520, img:IMG.biryani, tag:"Best seller"},
+ {id:"m14", cat:"rice", n:"Mutton Biryani", d:"Same method, mutton shoulder. Takes twenty-five minutes — worth the wait.", p:760, img:IMG.biryani},
+ {id:"m15", cat:"rice", n:"Beef Pulao", d:"Cooked in bone stock with whole spice, no colour added. Served with kachumber.", p:610, img:IMG.pulao},
+ {id:"m16", cat:"rice", n:"Kabuli Pulao", d:"Afghan style with carrot, raisin and almond over a mutton shank.", p:980, img:IMG.pulao},
 
-      <aside class="ember-card" aria-label="Service today">
-        <div class="ember-row"><span class="ember-dot" aria-hidden="true"></span><b>Kitchen open now</b></div>
-        <dl>
-          <div><dt>Coal pit</dt><dd>Lit 11:40 am</dd></div>
-          <div><dt>Tonight's karahi</dt><dd>Mutton · 4 kg</dd></div>
-          <div><dt>Tables free</dt><dd>9 of 42</dd></div>
-          <div><dt>Kitchen closes</dt><dd>1:00 am</dd></div>
-        </dl>
-      </aside>
-    </div>
-  </div>
-</section>
+ {id:"m17", cat:"bread", n:"Tandoori Roti", d:"Whole wheat, straight off the wall of the wood-fired tandoor.", p:35, img:IMG.roti},
+ {id:"m18", cat:"bread", n:"Butter Naan", d:"Soft white flour naan brushed with desi ghee as it comes out.", p:80, img:IMG.naan},
+ {id:"m19", cat:"bread", n:"Garlic Cheese Naan", d:"Mozzarella and roasted garlic folded through, served in four pieces.", p:280, img:IMG.naan, tag:"Popular"},
+ {id:"m20", cat:"bread", n:"Aloo Paratha", d:"Layered and pan-fried with spiced potato, served with butter and raita.", p:210, img:IMG.paratha},
+ {id:"m21", cat:"bread", n:"Raita &amp; Salad", d:"Mint yoghurt raita with a plate of onion, cucumber, tomato and lemon.", p:150, img:IMG.raita},
 
-<div class="strip" aria-hidden="true">
-  <div class="strip-tr" id="strip"></div>
-</div>
+ {id:"m22", cat:"sweet", n:"Kheer", d:"Rice pudding cooked down slowly, chilled, topped with pistachio.", p:220, img:IMG.kheer},
+ {id:"m23", cat:"sweet", n:"Gulab Jamun (4 pc)", d:"Fried khoya dumplings in warm cardamom syrup.", p:260, img:IMG.gulab},
+ {id:"m24", cat:"sweet", n:"Kashmiri Falooda", d:"Rose syrup, vermicelli, basil seed and kulfi in a tall glass.", p:340, img:IMG.falooda, tag:"Popular"},
 
-<!-- ================= ABOUT ================= -->
-<section id="about">
-  <div class="wrap about-grid">
-    <div class="about-imgs rv">
-      <figure><img src="https://images.unsplash.com/photo-1567337710282-00832b415979?q=80&w=900&auto=format&fit=crop" alt="Kebabs turning over glowing coals" loading="lazy"></figure>
-      <figure><img src="https://images.unsplash.com/photo-1600891964092-4316c288032e?q=80&w=900&auto=format&fit=crop" alt="Karahi being finished in the open kitchen" loading="lazy"></figure>
-      <div class="badge"><b>17</b><span>Years on<br>Susan Road</span></div>
-    </div>
+ {id:"m25", cat:"drink", n:"Sweet Lassi", d:"Thick set yoghurt blended with sugar and ice, served in a steel tumbler.", p:190, img:IMG.lassi},
+ {id:"m26", cat:"drink", n:"Doodh Patti Chai", d:"Full milk tea boiled down on the stove. One cup, properly made.", p:120, img:IMG.chai},
+ {id:"m27", cat:"drink", n:"Fresh Lime Soda", d:"Lime, soda and black salt. Sweet or salted, tell us which.", p:160, img:IMG.soda},
+ {id:"m28", cat:"drink", n:"Soft Drink (Regular)", d:"Chilled bottle. Cola, lemon-lime or orange.", p:100, img:IMG.soda}
+];
 
-    <div class="about-txt rv">
-      <p class="eyebrow">The house</p>
-      <h2>One pit.<br>Two brothers.<br>No shortcuts.</h2>
-      <p class="lede">Mudassar and Musa opened a six-table shop on Susan Road in 2009 with a single coal pit and their mother's karahi method. The pit is still the same size. Everything else grew around it.</p>
-      <p class="lede">Meat is butchered every morning, never frozen. Spices are dry-roasted and ground in-house each week. The tandoor runs on wood, not gas, which is why the naan tastes the way it does and why we cannot rush your order.</p>
-      <ul class="stats">
-        <li><b>100%</b><span>Charcoal fired</span></li>
-        <li><b>Daily</b><span>Fresh cut meat</span></li>
-        <li><b>42</b><span>Seats indoor + roof</span></li>
-      </ul>
-    </div>
-  </div>
-</section>
+var CATS=[
+ {k:"grill",  l:"Charcoal Grill"},
+ {k:"karahi", l:"Karahi & Curries"},
+ {k:"rice",   l:"Rice & Biryani"},
+ {k:"bread",  l:"Breads & Sides"},
+ {k:"sweet",  l:"Desserts"},
+ {k:"drink",  l:"Drinks"}
+];
 
-<!-- ================= SIGNATURE ================= -->
-<section id="signature">
-  <div class="wrap">
-    <div class="sec-head rv">
-      <div>
-        <p class="eyebrow">Signature dishes</p>
-        <h2>What people<br>drive across town for</h2>
-      </div>
-      <p class="lede">Three plates account for most of what leaves this kitchen. If it is your first visit, order from here.</p>
-    </div>
+var SIGS=[
+ {id:"m7",  rank:"No. 01", n:"Mutton Karahi", d:"Fifty minutes in the wok. Tomato, ginger, crushed black pepper — the plate this place was built on.", p:2680, img:IMG.karahi},
+ {id:"m1",  rank:"No. 02", n:"Beef Seekh Kebab", d:"Minced by hand every morning, never a machine. Green chilli, roasted coriander, straight over coal.", p:640, img:IMG.seekh},
+ {id:"m9",  rank:"No. 03", n:"Beef Nihari", d:"Shank on the fire from midnight. Ginger, lemon, fried onion. Sold out most nights by ten.", p:690, img:IMG.nihari}
+];
 
-    <div class="sig-grid" id="sigGrid"></div>
-  </div>
-</section>
+var REVIEWS=[
+ {q:"The nihari finishes by 10 pm and now I know why. I brought my father, who is impossible to please with food, and he asked for the recipe. They did not give it.", n:"Hamza Tariq", m:"Google · 3 weeks ago", i:"H"},
+ {q:"We booked the rooftop for eleven people on a Friday. Table was ready, the karahi came out at the same time as the bread, and nobody had to ask for anything twice.", n:"Ayesha Nadeem", m:"Google · 1 month ago", i:"A"},
+ {q:"Ordered delivery to Peoples Colony at half past midnight. Arrived in twenty-two minutes and the seekh was still hot enough to steam the box. That is rare here.", n:"Bilal Sheikh", m:"Google · 2 weeks ago", i:"B"}
+];
 
-<!-- ================= MENU ================= -->
-<section id="menu" class="menu-sec">
-  <div class="wrap">
-    <div class="sec-head rv" style="justify-content:center;text-align:center;flex-direction:column;align-items:center">
-      <p class="eyebrow" style="justify-content:center">The full menu</p>
-      <h2>Order in, or order out</h2>
-      <p class="lede" style="text-align:center">Everything below is available for dine-in and delivery across Faisalabad. Add items to your cart and we will call to confirm.</p>
-    </div>
+/* ---------- STRIP ---------- */
+var stripItems=["Charcoal fired daily","Fresh cut, never frozen","Wood-fired tandoor","Open till 1 am","Free delivery over Rs 2,000","Susan Road, Faisalabad"];
+var strip=$("#strip");
+if(strip){
+  var html="";
+  for(var s=0;s<2;s++){ for(var i=0;i<stripItems.length;i++){ html+="<span>"+stripItems[i]+"</span>"; } }
+  strip.innerHTML=html;
+}
 
-    <div class="tabs" id="tabs" role="tablist" aria-label="Menu categories"></div>
-    <div class="menu-grid" id="menuGrid" role="tabpanel" aria-live="polite"></div>
-  </div>
-</section>
+/* ---------- SIGNATURE ---------- */
+var sg=$("#sigGrid");
+if(sg){
+  sg.innerHTML=SIGS.map(function(x){
+    return '<article class="sig rv">'+
+      '<div class="sig-img"><img src="'+x.img+'" alt="'+x.n+'" loading="lazy">'+
+      '<span class="sig-rank">'+x.rank+'</span></div>'+
+      '<div class="sig-body"><h3>'+x.n+'</h3><p>'+x.d+'</p>'+
+      '<div class="sig-foot"><span class="price"><small>Rs</small> '+x.p.toLocaleString("en-PK")+'</span>'+
+      '<button class="btn btn-gold btn-sm add" data-id="'+x.id+'">Add to cart</button></div></div></article>';
+  }).join("");
+}
 
-<!-- ================= OFFERS ================= -->
-<section id="offers">
-  <div class="wrap">
-    <div class="sec-head rv">
-      <div>
-        <p class="eyebrow">Running now</p>
-        <h2>Deals worth<br>planning around</h2>
-      </div>
-      <p class="lede">Three standing offers. No coupon codes, no fine print — mention it at the counter or when you call.</p>
-    </div>
+/* ---------- REVIEWS ---------- */
+var rg=$("#revGrid");
+if(rg){
+  var star='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.9 6.3 6.9.8-5.1 4.7 1.4 6.8L12 17.3 5.9 20.6l1.4-6.8L2.2 9.1l6.9-.8z"/></svg>';
+  rg.innerHTML=REVIEWS.map(function(x){
+    return '<article class="rev"><div class="stars" aria-label="5 out of 5 stars">'+star+star+star+star+star+'</div>'+
+      '<blockquote>&ldquo;'+x.q+'&rdquo;</blockquote>'+
+      '<div class="rev-who"><span class="av" aria-hidden="true">'+x.i+'</span>'+
+      '<div><b>'+x.n+'</b><span>'+x.m+'</span></div></div></article>';
+  }).join("");
+}
 
-    <div class="offers rv">
-      <article class="offer offer--lg">
-        <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?q=80&w=1400&auto=format&fit=crop" alt="Family seated around a full table of grilled dishes" loading="lazy">
-        <span class="offer-tag">Family deal</span>
-        <span class="when">Every day · 12 pm — 5 pm</span>
-        <h3>Feast for four, Rs 3,450</h3>
-        <p>Full mutton karahi, one kg mixed grill platter, four tandoori rotis, raita, salad and four soft drinks. Saves you about Rs 900 against the à la carte price.</p>
-        <a href="#reserve" class="btn btn-gold btn-sm">Book this deal</a>
-      </article>
+/* ---------- MENU TABS ---------- */
+var tabs=$("#tabs"), grid=$("#menuGrid"), active=CATS[0].k;
+function counts(k){ return MENU.filter(function(m){return m.cat===k}).length; }
+if(tabs){
+  tabs.innerHTML=CATS.map(function(c){
+    return '<button class="tab'+(c.k===active?' on':'')+'" role="tab" data-cat="'+c.k+'" aria-selected="'+(c.k===active)+'">'+
+      c.l+' <em>'+counts(c.k)+'</em></button>';
+  }).join("");
+}
+function drawMenu(){
+  if(!grid) return;
+  var list=MENU.filter(function(m){return m.cat===active});
+  grid.innerHTML=list.map(function(m,i){
+    return '<article class="dish" style="animation-delay:'+(i*45)+'ms">'+
+      '<div class="dish-img"><img src="'+m.img+'" alt="'+m.n+'" loading="lazy"></div>'+
+      '<div class="dish-b"><div class="dish-t"><h3>'+m.n+(m.tag?'<span class="tag">'+m.tag+'</span>':'')+'</h3>'+
+      '<span class="price">'+rs(m.p)+'</span></div>'+
+      '<p>'+m.d+'</p>'+
+      '<button class="dish-add add" data-id="'+m.id+'">Add to cart</button></div></article>';
+  }).join("");
+}
+drawMenu();
+if(tabs) tabs.addEventListener("click",function(e){
+  var b=e.target.closest(".tab"); if(!b) return;
+  active=b.dataset.cat;
+  $$(".tab",tabs).forEach(function(t){
+    var on=t===b; t.classList.toggle("on",on); t.setAttribute("aria-selected",on);
+  });
+  drawMenu();
+});
 
-      <article class="offer">
-        <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=1000&auto=format&fit=crop" alt="Late night plate of grilled meat" loading="lazy">
-        <span class="offer-tag">Late night</span>
-        <span class="when">11 pm — 1 am</span>
-        <h3>20% off the grill</h3>
-        <p>Every seekh, boti and tikka on the charcoal menu, one fifth off after eleven. Dine-in only.</p>
-        <a href="#menu" class="btn btn-ghost btn-sm">See the grill</a>
-      </article>
+/* ---------- TOAST ---------- */
+var toastEl=$("#toast"), tT;
+function toast(msg){
+  if(!toastEl) return;
+  toastEl.textContent=msg; toastEl.classList.add("on");
+  clearTimeout(tT); tT=setTimeout(function(){toastEl.classList.remove("on")},2300);
+}
 
-      <article class="offer">
-        <img src="https://images.unsplash.com/photo-1601050690597-df0568f70950?q=80&w=1000&auto=format&fit=crop" alt="Delivery bag with hot food" loading="lazy">
-        <span class="offer-tag">Delivery</span>
-        <span class="when">Orders over Rs 2,000</span>
-        <h3>Free delivery citywide</h3>
-        <p>Anywhere inside Faisalabad city limits. Under Rs 2,000 the rider charge is a flat Rs 120.</p>
-        <a href="#menu" class="btn btn-ghost btn-sm">Order now</a>
-      </article>
-    </div>
-  </div>
-</section>
+/* ---------- CART ---------- */
+var cart=[];
+var cartEl=$("#cart"), scrim=$("#scrim"), body=$("#cartBody"), ft=$("#cartFt");
+var DELIVERY=120, FREE_OVER=2000;
 
-<!-- ================= GALLERY ================= -->
-<section id="gallery">
-  <div class="wrap">
-    <div class="sec-head rv">
-      <div>
-        <p class="eyebrow">The room</p>
-        <h2>Inside MM Brother</h2>
-      </div>
-      <p class="lede">Ground floor for quick meals, rooftop for long ones. Both look onto the pit.</p>
-    </div>
+function find(id){ var a=MENU.filter(function(m){return m.id===id}); return a[0]; }
+function subtotal(){ return cart.reduce(function(t,c){return t+c.p*c.q},0); }
 
-    <div class="gal rv">
-      <figure data-cap="The coal pit"><img src="https://images.unsplash.com/photo-1529692236671-f1f6cf9683ba?q=80&w=900&auto=format&fit=crop" alt="Skewers over an open charcoal pit" loading="lazy"></figure>
-      <figure data-cap="Rooftop seating"><img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=1200&auto=format&fit=crop" alt="Warm dining room with set tables" loading="lazy"></figure>
-      <figure data-cap="Fresh from the tandoor"><img src="https://images.unsplash.com/photo-1565557623262-b51c2513a641?q=80&w=800&auto=format&fit=crop" alt="Bread straight out of the clay oven" loading="lazy"></figure>
-      <figure data-cap="Mixed grill platter"><img src="https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=800&auto=format&fit=crop" alt="Platter of assorted grilled meats" loading="lazy"></figure>
-      <figure data-cap="Karahi, finished at the pass"><img src="https://images.unsplash.com/photo-1631452180519-c014fe946bc7?q=80&w=800&auto=format&fit=crop" alt="Curry finished in a heavy wok" loading="lazy"></figure>
-      <figure data-cap="Service, 9 pm"><img src="https://images.unsplash.com/photo-1552566626-52f8b828add9?q=80&w=1200&auto=format&fit=crop" alt="Busy restaurant floor during evening service" loading="lazy"></figure>
-      <figure data-cap="Mint chutney, made twice daily"><img src="https://images.unsplash.com/photo-1596797038530-2c107229654b?q=80&w=1200&auto=format&fit=crop" alt="Chutney and salad served alongside the grill" loading="lazy"></figure>
-    </div>
-  </div>
-</section>
+function addItem(id){
+  var m=find(id); if(!m) return;
+  var ex=cart.filter(function(c){return c.id===id})[0];
+  if(ex) ex.q++;
+  else cart.push({id:id,n:m.n,p:m.p,img:m.img,q:1});
+  render(); toast(m.n+" added");
+}
+function setQty(id,delta){
+  var ex=cart.filter(function(c){return c.id===id})[0]; if(!ex) return;
+  ex.q+=delta;
+  if(ex.q<=0) cart=cart.filter(function(c){return c.id!==id});
+  render();
+}
 
-<!-- ================= REVIEWS ================= -->
-<section id="reviews" class="rev-sec">
-  <div class="wrap">
-    <div class="sec-head rv">
-      <div>
-        <p class="eyebrow">Guest book</p>
-        <h2>4.7 from 2,140<br>Google reviews</h2>
-      </div>
-      <p class="lede">A few we did not choose for being polite — we chose them for being specific.</p>
-    </div>
+function render(){
+  var n=cart.reduce(function(t,c){return t+c.q},0);
+  var cnt=$("#cartCnt");
+  cnt.textContent=n; cnt.classList.toggle("show",n>0);
+  $("#cartMeta").textContent=n+(n===1?" item":" items");
 
-    <div class="rev-grid rv" id="revGrid"></div>
-  </div>
-</section>
+  if(!cart.length){
+    body.innerHTML='<div class="cart-empty">'+
+      '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4h2.2l2.1 11.2a2 2 0 0 0 2 1.6h7.6a2 2 0 0 0 2-1.6L20.5 8H6.2"/><circle cx="10" cy="20" r="1.4"/><circle cx="17" cy="20" r="1.4"/></svg>'+
+      '<p>Nothing here yet. Pick something off the menu.</p>'+
+      '<button class="btn btn-ghost btn-sm" id="goMenu">Browse the menu</button></div>';
+    ft.hidden=true;
+    return;
+  }
+  ft.hidden=false;
+  body.innerHTML=cart.map(function(c){
+    return '<div class="ci"><img src="'+c.img+'" alt="'+c.n+'">'+
+      '<div class="ci-b"><b>'+c.n+'</b><span>'+rs(c.p*c.q)+'</span></div>'+
+      '<div class="qty"><button data-d="-1" data-id="'+c.id+'" aria-label="Reduce quantity of '+c.n+'">−</button>'+
+      '<b>'+c.q+'</b>'+
+      '<button data-d="1" data-id="'+c.id+'" aria-label="Increase quantity of '+c.n+'">+</button></div></div>';
+  }).join("");
 
-<!-- ================= VISIT / RESERVE ================= -->
-<section id="visit">
-  <div class="wrap res-grid">
-    <div class="rv">
-      <p class="eyebrow">Find us</p>
-      <h2>Susan Road,<br>Madina Town</h2>
-      <p class="lede">Second building past the Kohinoor turn, opposite the bakery. Parking for fourteen cars behind the block.</p>
+  var sub=subtotal();
+  var del=sub>=FREE_OVER?0:DELIVERY;
+  $("#sub").textContent=rs(sub);
+  $("#del").textContent=del===0?"Free":rs(del);
+  $("#delLbl").textContent=del===0?"Delivery (over Rs 2,000)":"Delivery";
+  $("#tot").textContent=rs(sub+del);
+}
 
-      <ul class="info-list">
-        <li><span class="k">Address</span><span class="v">Plot 118-B, Susan Road, Madina Town, Faisalabad 38000, Punjab</span></li>
-        <li><span class="k">Phone</span><span class="v"><a href="tel:+924118765432">+92 41 1876 5432</a></span></li>
-        <li><span class="k">WhatsApp</span><span class="v"><a href="https://wa.me/923001876543" target="_blank" rel="noopener">+92 300 1876 543</a></span></li>
-        <li><span class="k">Email</span><span class="v"><a href="mailto:table@mmbrother.pk">table@mmbrother.pk</a></span></li>
-        <li><span class="k">Hours</span><span class="v">Monday — Sunday, 12:00 pm to 1:00 am<br>Friday closed 1:00 pm — 2:30 pm for prayer</span></li>
-      </ul>
+function openCart(){
+  cartEl.classList.add("open"); scrim.classList.add("on");
+  cartEl.setAttribute("aria-hidden","false"); document.body.style.overflow="hidden";
+}
+function closeCart(){
+  cartEl.classList.remove("open"); scrim.classList.remove("on");
+  cartEl.setAttribute("aria-hidden","true"); document.body.style.overflow="";
+}
+$("#cartOpen").addEventListener("click",openCart);
+$("#cartClose").addEventListener("click",closeCart);
+scrim.addEventListener("click",function(){closeCart();closeDrawer()});
 
-      <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=Susan+Road+Madina+Town+Faisalabad" target="_blank" rel="noopener">
-        <img src="https://images.unsplash.com/photo-1524661135-423995f22d0b?q=80&w=1200&auto=format&fit=crop" alt="Street map view of the Madina Town area" loading="lazy">
-        <span>Open in Google Maps <b style="color:var(--brass)">↗</b></span>
-      </a>
-    </div>
+body.addEventListener("click",function(e){
+  var q=e.target.closest("[data-d]");
+  if(q){ setQty(q.dataset.id, parseInt(q.dataset.d,10)); return; }
+  if(e.target.id==="goMenu"){ closeCart(); document.getElementById("menu").scrollIntoView({behavior:"smooth"}); }
+});
 
-    <div class="form-card rv" id="reserve">
-      <p class="eyebrow">Reservations</p>
-      <h3 style="font-size:clamp(23px,3vw,31px);margin-bottom:9px">Reserve a table</h3>
-      <p style="font-size:14.5px;color:var(--bone-dim)">Tables are held for 20 minutes past the booked time. For parties above ten, please call us instead.</p>
+document.addEventListener("click",function(e){
+  var a=e.target.closest(".add"); if(!a) return;
+  addItem(a.dataset.id);
+  if(a.classList.contains("dish-add")){
+    a.classList.add("done"); var old=a.textContent; a.textContent="Added ✓";
+    setTimeout(function(){a.classList.remove("done");a.textContent=old},1200);
+  }
+});
 
-      <form id="resForm" novalidate>
-        <div class="form-grid">
-          <div class="fld">
-            <label for="rName">Full name</label>
-            <input type="text" id="rName" name="name" placeholder="Muazzan Ahmed" autocomplete="name">
-            <span class="err" id="eName"></span>
-          </div>
-          <div class="fld">
-            <label for="rPhone">Phone number</label>
-            <input type="tel" id="rPhone" name="phone" placeholder="0300 1234567" autocomplete="tel" inputmode="tel">
-            <span class="err" id="ePhone"></span>
-          </div>
-          <div class="fld">
-            <label for="rDate">Date</label>
-            <input type="date" id="rDate" name="date">
-            <span class="err" id="eDate"></span>
-          </div>
-          <div class="fld">
-            <label for="rTime">Time</label>
-            <select id="rTime" name="time">
-              <option value="">Select a time</option>
-            </select>
-            <span class="err" id="eTime"></span>
-          </div>
-          <div class="fld full">
-            <label for="rGuests">Guests</label>
-            <select id="rGuests" name="guests">
-              <option value="">How many people?</option>
-            </select>
-            <span class="err" id="eGuests"></span>
-          </div>
-          <div class="fld full">
-            <button type="submit" class="btn btn-gold btn-block">Confirm reservation</button>
-          </div>
-        </div>
-      </form>
+$("#placeBtn").addEventListener("click",function(){
+  var sub=subtotal(); var del=sub>=FREE_OVER?0:DELIVERY;
+  var id="MM-"+Math.floor(100000+Math.random()*899999);
+  body.innerHTML='<div class="cart-empty"><svg viewBox="0 0 24 24" style="stroke:#4ADE80" aria-hidden="true"><path d="M20 6L9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"/></svg>'+
+    '<p style="color:var(--bone);font-size:16px;margin-bottom:8px"><b>Order placed</b></p>'+
+    '<p style="font-family:var(--mono);font-size:12px;letter-spacing:.12em;color:var(--brass)">'+id+'</p>'+
+    '<p style="margin-top:14px">Total '+rs(sub+del)+'. We will call you on the number you order from to confirm the address, usually inside five minutes.</p>'+
+    '<button class="btn btn-ghost btn-sm" id="goMenu">Order something else</button></div>';
+  ft.hidden=true; cart=[];
+  $("#cartCnt").classList.remove("show"); $("#cartCnt").textContent="0"; $("#cartMeta").textContent="0 items";
+  toast("Order "+id+" placed");
+});
+render();
 
-      <div class="ok-msg" id="resOk" role="status">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6L9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        <div><b id="okTitle">Table reserved</b><p id="okBody"></p></div>
-      </div>
-      <p class="form-note">We call to confirm within 15 minutes</p>
-    </div>
-  </div>
-</section>
-</main>
+/* ---------- HEADER / DRAWER ---------- */
+var hdr=$("#hdr"), burger=$("#burger"), drawer=$("#drawer");
+function onScroll(){ hdr.classList.toggle("stuck", window.scrollY>24); }
+onScroll(); window.addEventListener("scroll",onScroll,{passive:true});
 
-<!-- ================= FOOTER ================= -->
-<footer class="ftr">
-  <div class="wrap">
-    <div class="ftr-grid">
-      <div class="ftr-brand">
-        <a href="#top" class="logo">
-          <span class="logo-mk">MM</span>
-          <span class="logo-tx"><b>MM BROTHER</b><span>Restaurant · Faisalabad</span></span>
-        </a>
-        <p>Charcoal-fired Pakistani cooking on Susan Road since 2009. Dine in, take away, or have it sent across the city.</p>
-        <div class="socials">
-          <a href="https://www.facebook.com/" target="_blank" rel="noopener" aria-label="Facebook"><svg viewBox="0 0 24 24"><path d="M13.5 21v-8h2.7l.4-3.1h-3.1V7.9c0-.9.25-1.5 1.55-1.5h1.65V3.6A22 22 0 0 0 14.3 3.5c-2.4 0-4 1.45-4 4.13V9.9H7.6V13h2.7v8z"/></svg></a>
-          <a href="https://www.instagram.com/" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24"><path d="M12 2.16c3.2 0 3.58.01 4.85.07 3.25.15 4.77 1.69 4.92 4.92.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.15 3.23-1.66 4.77-4.92 4.92-1.27.06-1.64.07-4.85.07s-3.58-.01-4.85-.07c-3.26-.15-4.77-1.7-4.92-4.92C2.17 15.58 2.16 15.2 2.16 12s.01-3.58.07-4.85C2.38 3.92 3.89 2.38 7.15 2.23 8.42 2.17 8.8 2.16 12 2.16M12 0C8.74 0 8.33.01 7.05.07c-4.36.2-6.78 2.62-6.98 6.98C.01 8.33 0 8.74 0 12s.01 3.67.07 4.95c.2 4.36 2.62 6.78 6.98 6.98C8.33 23.99 8.74 24 12 24s3.67-.01 4.95-.07c4.35-.2 6.78-2.62 6.98-6.98.06-1.28.07-1.69.07-4.95s-.01-3.67-.07-4.95c-.2-4.35-2.62-6.78-6.98-6.98C15.67.01 15.26 0 12 0m0 5.84a6.16 6.16 0 1 0 0 12.32 6.16 6.16 0 0 0 0-12.32M12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8m6.4-11.85a1.44 1.44 0 1 0 0 2.88 1.44 1.44 0 0 0 0-2.88"/></svg></a>
-          <a href="https://wa.me/923001876543" target="_blank" rel="noopener" aria-label="WhatsApp"><svg viewBox="0 0 24 24"><path d="M17.5 14.4c-.3-.15-1.75-.86-2.02-.96-.27-.1-.47-.15-.67.15s-.77.96-.94 1.16c-.17.2-.35.22-.65.07a8.2 8.2 0 0 1-2.4-1.48 9 9 0 0 1-1.66-2.07c-.17-.3-.02-.46.13-.6.14-.14.3-.35.45-.53.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.08-.15-.67-1.6-.92-2.2-.24-.58-.49-.5-.67-.5h-.57c-.2 0-.52.07-.8.37s-1.05 1.02-1.05 2.5 1.08 2.9 1.23 3.1c.15.2 2.12 3.24 5.14 4.54.72.31 1.28.5 1.71.63.72.23 1.37.2 1.89.12.58-.09 1.75-.72 2-1.4.25-.7.25-1.28.17-1.41-.07-.13-.27-.2-.57-.35M12.05 21.8h-.02a9.8 9.8 0 0 1-4.98-1.36l-.36-.21-3.7.97.99-3.6-.24-.37a9.75 9.75 0 0 1-1.5-5.2A9.8 9.8 0 0 1 18.98 5.1a9.7 9.7 0 0 1 2.87 6.94 9.8 9.8 0 0 1-9.8 9.77M20.5 3.5A11.7 11.7 0 0 0 12.05 0 11.8 11.8 0 0 0 .27 11.79a11.7 11.7 0 0 0 1.58 5.9L.17 24l6.45-1.69a11.8 11.8 0 0 0 5.43 1.38h.01a11.8 11.8 0 0 0 8.44-20.2"/></svg></a>
-        </div>
-      </div>
+function openDrawer(){
+  drawer.classList.add("open"); burger.classList.add("x");
+  burger.setAttribute("aria-expanded","true"); drawer.setAttribute("aria-hidden","false");
+  document.body.style.overflow="hidden";
+  $$("#drawer a").forEach(function(a,i){ a.style.animationDelay=(60+i*45)+"ms" });
+}
+function closeDrawer(){
+  drawer.classList.remove("open"); burger.classList.remove("x");
+  burger.setAttribute("aria-expanded","false"); drawer.setAttribute("aria-hidden","true");
+  document.body.style.overflow="";
+}
+burger.addEventListener("click",function(){
+  drawer.classList.contains("open")?closeDrawer():openDrawer();
+});
+$$("#drawer a").forEach(function(a){ a.addEventListener("click",closeDrawer) });
+document.addEventListener("keydown",function(e){
+  if(e.key==="Escape"){ closeDrawer(); closeCart(); }
+});
+window.addEventListener("resize",function(){
+  if(window.innerWidth>900 && drawer.classList.contains("open")) closeDrawer();
+});
 
-      <div>
-        <h4>Explore</h4>
-        <ul>
-          <li><a href="#about">About us</a></li>
-          <li><a href="#signature">Signature dishes</a></li>
-          <li><a href="#menu">Full menu</a></li>
-          <li><a href="#offers">Special offers</a></li>
-          <li><a href="#gallery">Gallery</a></li>
-          <li><a href="#reviews">Reviews</a></li>
-        </ul>
-      </div>
+/* active nav link */
+var navLinks=$$("#nav a");
+var secs=navLinks.map(function(a){ return document.querySelector(a.getAttribute("href")) }).filter(Boolean);
+if("IntersectionObserver" in window && secs.length){
+  var so=new IntersectionObserver(function(en){
+    en.forEach(function(e){
+      if(e.isIntersecting){
+        navLinks.forEach(function(l){ l.classList.toggle("on", l.getAttribute("href")==="#"+e.target.id) });
+      }
+    });
+  },{rootMargin:"-45% 0px -50% 0px"});
+  secs.forEach(function(s){ so.observe(s) });
+}
 
-      <div>
-        <h4>Order &amp; book</h4>
-        <ul>
-          <li><a href="#reserve">Reserve a table</a></li>
-          <li><a href="#menu">Order online</a></li>
-          <li><a href="tel:+924118765432">Call to order</a></li>
-          <li><a href="https://wa.me/923001876543" target="_blank" rel="noopener">WhatsApp us</a></li>
-          <li><a href="#offers">Family deals</a></li>
-        </ul>
-      </div>
+/* ---------- REVEAL ---------- */
+if("IntersectionObserver" in window){
+  var ro=new IntersectionObserver(function(en,o){
+    en.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add("in"); o.unobserve(e.target); } });
+  },{threshold:.08,rootMargin:"0px 0px -40px 0px"});
+  $$(".rv").forEach(function(el){ ro.observe(el) });
+}else{ $$(".rv").forEach(function(el){ el.classList.add("in") }); }
 
-      <div>
-        <h4>Visit</h4>
-        <ul>
-          <li><a href="https://www.google.com/maps/search/?api=1&query=Susan+Road+Madina+Town+Faisalabad" target="_blank" rel="noopener">Plot 118-B, Susan Road<br>Madina Town, Faisalabad</a></li>
-          <li><a href="tel:+924118765432">+92 41 1876 5432</a></li>
-          <li><a href="mailto:table@mmbrother.pk">table@mmbrother.pk</a></li>
-          <li style="color:var(--bone-dim);font-size:14px">Daily · 12:00 pm — 1:00 am</li>
-        </ul>
-      </div>
-    </div>
+/* ---------- RESERVATION FORM ---------- */
+var form=$("#resForm");
+var dateEl=$("#rDate"), timeEl=$("#rTime"), guestEl=$("#rGuests");
 
-    <div class="ftr-bot">
-      <span>© <span id="yr"></span> MM Brother Restaurant · Faisalabad</span>
-      <span>Charcoal since 2009</span>
-    </div>
-  </div>
-</footer>
+/* time options 12:00pm -> 12:30am, 30 min steps */
+(function(){
+  var out=[];
+  for(var h=12;h<=24;h++){
+    for(var m=0;m<60;m+=30){
+      if(h===24 && m>30) break;
+      var hh=h%24, ap=hh>=12&&hh<24?"pm":"am", disp=hh%12===0?12:hh%12;
+      var val=("0"+hh).slice(-2)+":"+("0"+m).slice(-2);
+      out.push('<option value="'+val+'">'+disp+":"+("0"+m).slice(-2)+" "+ap+"</option>");
+    }
+  }
+  timeEl.insertAdjacentHTML("beforeend",out.join(""));
+})();
 
-<!-- ================= CART ================= -->
-<div class="scrim" id="scrim"></div>
-<aside class="cart" id="cart" aria-label="Your order" aria-hidden="true">
-  <div class="cart-hd">
-    <div><h3>Your order</h3><em id="cartMeta">0 items</em></div>
-    <button class="xbtn" id="cartClose" aria-label="Close cart">✕</button>
-  </div>
-  <div class="cart-body" id="cartBody"></div>
-  <div class="cart-ft" id="cartFt" hidden>
-    <dl>
-      <div><dt>Subtotal</dt><dd id="sub">Rs 0</dd></div>
-      <div><dt id="delLbl">Delivery</dt><dd id="del">Rs 120</dd></div>
-      <div class="tot"><dt>Total</dt><dd id="tot">Rs 0</dd></div>
-    </dl>
-    <button class="btn btn-gold btn-block" id="placeBtn">Place order</button>
-  </div>
-</aside>
+/* guests 1-10 */
+(function(){
+  var out=[];
+  for(var i=1;i<=10;i++) out.push('<option value="'+i+'">'+i+(i===1?" guest":" guests")+(i===10?" (max online)":"")+'</option>');
+  guestEl.insertAdjacentHTML("beforeend",out.join(""));
+})();
 
-<div class="toast" id="toast" role="status" aria-live="polite"></div>
+/* date bounds: today .. +60 days */
+(function(){
+  var t=new Date(), pad=function(n){return ("0"+n).slice(-2)};
+  var iso=function(d){return d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate())};
+  dateEl.min=iso(t);
+  var max=new Date(t.getTime()+60*86400000);
+  dateEl.max=iso(max);
+})();
 
-<script src="js/script.js"></script>
+function fail(fld,errId,msg){
+  document.getElementById(fld).closest(".fld").classList.add("bad");
+  document.getElementById(errId).textContent=msg;
+}
+function clearErr(el){
+  var f=el.closest(".fld"); if(f) f.classList.remove("bad");
+}
+["rName","rPhone","rDate","rTime","rGuests"].forEach(function(id){
+  var el=document.getElementById(id);
+  el.addEventListener("input",function(){clearErr(el)});
+  el.addEventListener("change",function(){clearErr(el)});
+});
 
-</body>
-</html>
+form.addEventListener("submit",function(e){
+  e.preventDefault();
+  $$(".fld",form).forEach(function(f){f.classList.remove("bad")});
+  $("#resOk").classList.remove("show");
+
+  var ok=true;
+  var name=$("#rName").value.trim();
+  var phoneRaw=$("#rPhone").value.trim();
+  var phone=phoneRaw.replace(/[\s\-()]/g,"");
+
+  if(name.length<3){ fail("rName","eName","Enter your full name"); ok=false; }
+  else if(!/^[A-Za-z\u0600-\u06FF.'\s-]+$/.test(name)){ fail("rName","eName","Letters only, please"); ok=false; }
+
+  if(!phone){ fail("rPhone","ePhone","Enter a phone number"); ok=false; }
+  else if(!/^(?:\+92|0092|0)?3\d{9}$/.test(phone) && !/^(?:\+92|0)?41\d{7,8}$/.test(phone)){
+    fail("rPhone","ePhone","Use a valid Pakistani number, e.g. 0300 1234567"); ok=false;
+  }
+
+  if(!dateEl.value){ fail("rDate","eDate","Pick a date"); ok=false; }
+  else{
+    var today=new Date(); today.setHours(0,0,0,0);
+    var picked=new Date(dateEl.value+"T00:00:00");
+    if(isNaN(picked.getTime())){ fail("rDate","eDate","Pick a valid date"); ok=false; }
+    else if(picked<today){ fail("rDate","eDate","That date has passed"); ok=false; }
+  }
+
+  if(!timeEl.value){ fail("rTime","eTime","Pick a time"); ok=false; }
+  else if(dateEl.value){
+    var now=new Date();
+    var slot=new Date(dateEl.value+"T"+(timeEl.value==="24:00"?"23:59":timeEl.value)+":00");
+    if(timeEl.value>="24:00"||parseInt(timeEl.value,10)===24){ slot.setDate(slot.getDate()+1); }
+    if(slot.getTime()-now.getTime() < 45*60000 && slot.toDateString()===now.toDateString()){
+      fail("rTime","eTime","Book at least 45 minutes ahead, or call us"); ok=false;
+    }
+  }
+
+  if(!guestEl.value){ fail("rGuests","eGuests","Choose party size"); ok=false; }
+
+  if(!ok){ $(".fld.bad input, .fld.bad select").focus(); return; }
+
+  var ref="MMB-"+Math.floor(1000+Math.random()*8999);
+  var dObj=new Date(dateEl.value+"T00:00:00");
+  var pretty=dObj.toLocaleDateString("en-GB",{weekday:"long",day:"numeric",month:"long"});
+  var tLabel=timeEl.options[timeEl.selectedIndex].textContent;
+
+  $("#okTitle").textContent="Table reserved · "+ref;
+  $("#okBody").textContent=name+", your table for "+guestEl.value+" is held for "+pretty+" at "+tLabel+
+    ". We will call "+phoneRaw+" within 15 minutes to confirm. The table is held 20 minutes past your time.";
+  $("#resOk").classList.add("show");
+  form.reset();
+  toast("Reservation "+ref+" received");
+  $("#resOk").scrollIntoView({behavior:"smooth",block:"center"});
+});
+
+/* ---------- YEAR ---------- */
+$("#yr").textContent=new Date().getFullYear();
+
+/* ---------- SMOOTH ANCHORS (safety for old browsers) ---------- */
+$$('a[href^="#"]').forEach(function(a){
+  a.addEventListener("click",function(e){
+    var id=a.getAttribute("href");
+    if(id.length<2) return;
+    var t=document.querySelector(id);
+    if(!t) return;
+    e.preventDefault();
+    closeDrawer(); closeCart();
+    var top=t.getBoundingClientRect().top+window.scrollY-(window.innerWidth>900?70:66);
+    window.scrollTo({top:top,behavior:"smooth"});
+  });
+});
+})();
