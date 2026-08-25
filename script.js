@@ -277,8 +277,9 @@ $$("#drawer a").forEach(function(a){ a.addEventListener("click",closeDrawer) });
 document.addEventListener("keydown",function(e){
   if(e.key==="Escape"){ closeDrawer(); closeCart(); }
 });
+var NAV_BP=1199;   /* must match the CSS breakpoint in style.css */
 window.addEventListener("resize",function(){
-  if(window.innerWidth>900 && drawer.classList.contains("open")) closeDrawer();
+  if(window.innerWidth>NAV_BP && drawer.classList.contains("open")) closeDrawer();
 });
 
 /* active nav link */
@@ -416,7 +417,7 @@ $$('a[href^="#"]').forEach(function(a){
     if(!t) return;
     e.preventDefault();
     closeDrawer(); closeCart();
-    var top=t.getBoundingClientRect().top+window.scrollY-(window.innerWidth>900?70:66);
+    var top=t.getBoundingClientRect().top+window.scrollY-(window.innerWidth>NAV_BP?70:66);
     window.scrollTo({top:top,behavior:"smooth"});
   });
 });
