@@ -95,6 +95,13 @@ h3{font-size:clamp(20px,2.4vw,27px);line-height:1.15}
   display:grid;place-items:center;font-family:var(--display);font-weight:700;
   font-size:14px;color:var(--brass);letter-spacing:.02em;
 }
+/* header brand lockup (image logo) — scoped so the footer lockup is unaffected */
+.brand{flex:0 1 auto;min-width:0}
+.brand-img{
+  display:block;width:auto;height:52px;max-width:100%;
+  object-fit:contain;              /* never stretch or squash */
+}
+
 .logo-tx{min-width:0}
 .logo-tx b{display:block;font-family:var(--display);font-weight:700;font-size:16px;letter-spacing:.06em;line-height:1;white-space:nowrap}
 .logo-tx span{display:block;font-family:var(--mono);font-size:8.5px;letter-spacing:.32em;color:var(--brass);
@@ -502,6 +509,7 @@ h3{font-size:clamp(20px,2.4vw,27px);line-height:1.15}
 @media(max-width:1199px){
   .nav,.hdr-act .btn{display:none}
   .burger{display:grid}
+  .brand-img{height:48px}
 }
 @media(max-width:900px){
   .about-grid,.res-grid{grid-template-columns:1fr}
@@ -512,6 +520,7 @@ h3{font-size:clamp(20px,2.4vw,27px);line-height:1.15}
   .gal figure:nth-child(6){grid-column:1/-1!important}
 }
 @media(max-width:640px){
+  .brand-img{height:42px}
   h2{font-size:clamp(29px,8vw,40px)}
   .hero{min-height:92svh}
   .hero h1{font-size:clamp(40px,12.5vw,62px)}
@@ -536,6 +545,7 @@ h3{font-size:clamp(20px,2.4vw,27px);line-height:1.15}
   .tab{flex:none}
 }
 @media(max-width:420px){
+  .brand-img{height:36px}
   .logo-tx span{display:none}
   .logo-mk{width:34px;height:34px;font-size:13px}
   .logo{gap:9px}
