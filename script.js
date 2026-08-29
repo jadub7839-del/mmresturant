@@ -82,9 +82,9 @@ var SIGS=[
 ];
 
 var REVIEWS=[
- {q:"The nihari finishes by 10 pm and now I know why. I brought my father, who is impossible to please with food, and he asked for the recipe. They did not give it.", n:"Hamza Tariq", m:"Google · 3 weeks ago", i:"H"},
- {q:"We booked the rooftop for eleven people on a Friday. Table was ready, the karahi came out at the same time as the bread, and nobody had to ask for anything twice.", n:"Ayesha Nadeem", m:"Google · 1 month ago", i:"A"},
- {q:"Ordered delivery to Peoples Colony at half past midnight. Arrived in twenty-two minutes and the seekh was still hot enough to steam the box. That is rare here.", n:"Bilal Sheikh", m:"Google · 2 weeks ago", i:"B"}
+ {q:"The nihari finishes by 10 pm and now I know why. I brought my father, who is impossible to please with food, and he asked for the recipe. They did not give it.", n:"Hamza Tariq", m:"Dine-in guest", i:"H"},
+ {q:"We booked the rooftop for eleven people on a Friday. Table was ready, the karahi came out at the same time as the bread, and nobody had to ask for anything twice.", n:"Ayesha Nadeem", m:"Rooftop booking", i:"A"},
+ {q:"Ordered delivery to Peoples Colony at half past midnight. Arrived in twenty-two minutes and the seekh was still hot enough to steam the box. That is rare here.", n:"Bilal Sheikh", m:"Delivery order", i:"B"}
 ];
 
 /* ---------- STRIP ---------- */
@@ -99,8 +99,9 @@ if(strip){
 /* ---------- SIGNATURE ---------- */
 var sg=$("#sigGrid");
 if(sg){
+  sg.classList.add("rv");
   sg.innerHTML=SIGS.map(function(x){
-    return '<article class="sig rv">'+
+    return '<article class="sig">'+
       '<div class="sig-img"><img src="'+x.img+'" alt="'+x.n+'" loading="lazy">'+
       '<span class="sig-rank">'+x.rank+'</span></div>'+
       '<div class="sig-body"><h3>'+x.n+'</h3><p>'+x.d+'</p>'+
@@ -173,7 +174,7 @@ function addItem(id){
   var ex=cart.filter(function(c){return c.id===id})[0];
   if(ex) ex.q++;
   else cart.push({id:id,n:m.n,p:m.p,img:m.img,q:1});
-  render(); toast(m.n+" added");
+  render(true); toast(m.n+" added");
 }
 function setQty(id,delta){
   var ex=cart.filter(function(c){return c.id===id})[0]; if(!ex) return;
@@ -182,10 +183,16 @@ function setQty(id,delta){
   render();
 }
 
-function render(){
+function render(bump){
   var n=cart.reduce(function(t,c){return t+c.q},0);
   var cnt=$("#cartCnt");
+  var grew=bump&&n>0;
   cnt.textContent=n; cnt.classList.toggle("show",n>0);
+  if(grew){
+    cnt.classList.remove("bump");
+    void cnt.offsetWidth;              /* restart the animation */
+    cnt.classList.add("bump");
+  }
   $("#cartMeta").textContent=n+(n===1?" item":" items");
 
   if(!cart.length){
