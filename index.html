@@ -363,6 +363,31 @@
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
+<!-- ===== MOTION-GRAPHICS INTRO (isolated overlay - site untouched) ===== -->
+<div class="mgi" id="mgi" role="presentation" aria-hidden="true">
+  <div class="mgi-veil" id="mgiVeil"></div>
+
+  <!-- chef layer sits BEHIND the brand composition -->
+  <div class="mgi-chef" id="mgiChef">
+    <video id="mgiChefVid" muted playsinline preload="auto" aria-hidden="true">
+      <source src="chef.webm" type="video/webm">
+      <source src="chef.mp4" type="video/mp4">
+    </video>
+  </div>
+
+  <!-- gold motion-graphic waves -->
+  <canvas class="mgi-canvas" id="mgiCanvas" aria-hidden="true"></canvas>
+
+  <!-- WELCOME / rule / logo : open composition, no container -->
+  <div class="mgi-brand" id="mgiBrand">
+    <p class="mgi-welcome"><span>WELCOME</span></p>
+    <span class="mgi-rule" aria-hidden="true"></span>
+    <img class="mgi-logo" src="logo.png" alt="MM Brother Restaurant" width="508" height="184">
+  </div>
+
+  <button class="mgi-skip" id="mgiSkip" type="button">Skip</button>
+</div>
+
 <script src="script.js"></script>
 
 </body>
