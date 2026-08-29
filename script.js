@@ -422,3 +422,229 @@ $$('a[href^="#"]').forEach(function(a){
   });
 });
 })();
+
+/* =========================================================================
+   MOTION-GRAPHICS INTRO — MM BROTHER RESTAURANT
+   Pure Canvas 2D + CSS. No 3D, no external library.
+   Flow: heavy blur -> gold wave from LEFT-MIDDLE + gold wave from
+   RIGHT-MIDDLE -> they meet at centre -> brand revealed from the meeting
+   point (WELCOME / rule / logo) -> chef clip descends from the TOP behind
+   the composition -> hold -> fade -> blur lifts -> site.
+   Self-contained: if anything fails, end() still reveals the site.
+   ========================================================================= */
+(function(){
+"use strict";
+var KEY="mmb_intro_v2";
+var root=document.getElementById("mgi");
+if(!root) return;
+
+var seen=false;
+try{ seen=sessionStorage.getItem(KEY)==="1"; }catch(e){}
+if(seen){ root.parentNode&&root.parentNode.removeChild(root); return; }
+try{ sessionStorage.setItem(KEY,"1"); }catch(e){}
+
+var veil=document.getElementById("mgiVeil");
+var cv=document.getElementById("mgiCanvas");
+var brand=document.getElementById("mgiBrand");
+var welcome=root.querySelector(".mgi-welcome");
+var rule=root.querySelector(".mgi-rule");
+var logo=root.querySelector(".mgi-logo");
+var chefBox=document.getElementById("mgiChef");
+var chefVid=document.getElementById("mgiChefVid");
+var skip=document.getElementById("mgiSkip");
+
+var reduce=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches;
+root.classList.add("on");
+var prevOverflow=document.body.style.overflow;
+document.body.style.overflow="hidden";
+
+var ended=false, raf=0;
+
+function end(){
+  if(ended) return; ended=true;
+  root.classList.add("ending");
+  if(raf) cancelAnimationFrame(raf);
+  try{ chefVid.pause(); }catch(e){}
+  var s=reduce?[0,60,120,180]:[0,340,660,960];
+  ["b3","b2","b1","b0"].forEach(function(c,i){
+    setTimeout(function(){ veil.className="mgi-veil "+c; }, s[i]);
+  });
+  setTimeout(function(){
+    root.classList.add("done");
+    setTimeout(function(){
+      document.body.style.overflow=prevOverflow;
+      if(root.parentNode) root.parentNode.removeChild(root);
+    }, reduce?320:1000);
+  }, reduce?200:1050);
+}
+skip.addEventListener("click",end);
+document.addEventListener("keydown",function(e){ if(e.key==="Escape") end(); });
+setTimeout(function(){ end(); }, 16000);            /* never trap the visitor */
+
+/* ---------------- easing + helpers ---------------- */
+function clamp01(v){ return v<0?0:v>1?1:v; }
+function seg(t,a,b){ return clamp01((t-a)/(b-a)); }
+function inOutCubic(t){ return t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2; }
+function outQuint(t){ return 1-Math.pow(1-t,5); }
+function outCubic(t){ return 1-Math.pow(1-t,3); }
+
+/* ---------------- brand composition ---------------- */
+function revealBrand(){
+  welcome.classList.add("in");
+  logo.classList.add("in");
+  var w=welcome.getBoundingClientRect().width||260;
+  rule.style.transition="width .95s "+"cubic-bezier(.22,.61,.36,1)";
+  requestAnimationFrame(function(){ rule.style.width=Math.round(w*0.92)+"px"; });
+}
+
+/* ---------------- chef: descends from the TOP only ---------------- */
+function chefIn(){
+  var playable=false;
+  try{ var pr=chefVid.play(); if(pr&&pr.catch) pr.catch(function(){}); playable=true; }catch(e){}
+  chefBox.style.transition="transform 1.5s cubic-bezier(.22,.61,.36,1), opacity 1.1s ease";
+  chefBox.style.opacity="1";
+  /* settles just above the WELCOME line, behind the composition */
+  chefBox.style.transform="translate(-50%, var(--mgi-chef-y))";
+}
+function chefPark(){
+  /* responsive resting position - never cropped, never over the wordmark */
+  var brandTop=brand.getBoundingClientRect().top;
+  var h=chefBox.offsetHeight||220;
+  var y=Math.max(6, brandTop-h*0.80);
+  root.style.setProperty("--mgi-chef-y", Math.round(y)+"px");
+}
+addEventListener("resize",chefPark,{passive:true});
+
+/* ---------------- reduced motion: straight to the brand ---------------- */
+if(reduce){
+  cv.style.display="none";
+  chefPark(); revealBrand(); chefIn();
+  setTimeout(end,900);
+  return;
+}
+
+/* ---------------- gold waves (Canvas 2D) ---------------- */
+var ctx=null;
+try{ ctx=cv.getContext("2d"); }catch(e){}
+if(!ctx){ chefPark(); revealBrand(); chefIn(); setTimeout(end,2600); return; }
+
+var W=0,H=0,DPR=1;
+function size(){
+  DPR=Math.min(window.devicePixelRatio||1,2);
+  W=innerWidth; H=innerHeight;
+  cv.width=Math.round(W*DPR); cv.height=Math.round(H*DPR);
+  cv.style.width=W+"px"; cv.style.height=H+"px";
+  ctx.setTransform(DPR,0,0,DPR,0,0);
+  chefPark();
+}
+size();
+addEventListener("resize",size,{passive:true});
+
+/* a metallic gold gradient: dark edge -> bright core -> dark edge,
+   which is what reads as brushed metal rather than flat yellow */
+function goldFill(x0,y0,x1,y1,a){
+  var g=ctx.createLinearGradient(x0,y0,x1,y1);
+  g.addColorStop(0.00,"rgba(92,68,22,"+a+")");
+  g.addColorStop(0.22,"rgba(201,162,74,"+a+")");
+  g.addColorStop(0.42,"rgba(247,231,187,"+a+")");
+  g.addColorStop(0.52,"rgba(255,248,224,"+a+")");
+  g.addColorStop(0.64,"rgba(231,206,142,"+a+")");
+  g.addColorStop(0.84,"rgba(160,120,44,"+a+")");
+  g.addColorStop(1.00,"rgba(74,54,18,"+a+")");
+  return g;
+}
+
+/* one flowing ribbon; dir -1 enters from the LEFT-MIDDLE, +1 from the
+   RIGHT-MIDDLE. Both travel horizontally toward the centre. */
+function ribbon(dir,prog,t,band,alpha,thick){
+  var midY=H*0.5;
+  var travel=(W*0.5+W*0.34);
+  var x0=dir<0 ? -W*0.34 + travel*prog : W+W*0.34 - travel*prog;
+  var len=W*0.62, steps=26;
+  var amp=H*0.055*(0.55+0.45*Math.sin(t*1.1+band));
+  var phase=t*1.6+band*1.7;
+
+  ctx.beginPath();
+  var i,x,y;
+  for(i=0;i<=steps;i++){
+    var u=i/steps;
+    x=x0+dir*(-1)*len*u*0;                      /* ribbon is drawn about x0 */
+    x=x0 - dir*len*u;
+    y=midY
+      + Math.sin(u*3.1+phase)*amp
+      + Math.sin(u*6.4-phase*0.7)*amp*0.34
+      + band*H*0.028;
+    if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+  }
+  for(i=steps;i>=0;i--){
+    var u2=i/steps;
+    x=x0 - dir*len*u2;
+    var taper=Math.sin(u2*Math.PI);             /* thin at both ends */
+    y=midY
+      + Math.sin(u2*3.1+phase)*amp
+      + Math.sin(u2*6.4-phase*0.7)*amp*0.34
+      + band*H*0.028
+      + thick*(0.25+0.75*taper);
+    ctx.lineTo(x,y);
+  }
+  ctx.closePath();
+  ctx.fillStyle=goldFill(x0,midY-thick,x0-dir*len,midY+thick,alpha);
+  ctx.fill();
+}
+
+var D={
+  wave:[0.15,2.05],      /* travel in from both middles                */
+  meet:2.05,             /* contact -> brand reveal starts immediately */
+  bloom:[2.05,2.75],     /* light blooms out of the meeting point      */
+  chef:2.55,             /* chef begins descending from the top        */
+  hold:[4.30,5.60],      /* premium hold                               */
+  out:5.60
+};
+var t0=performance.now(), brandDone=false, chefDone=false;
+
+function frame(now){
+  raf=requestAnimationFrame(frame);
+  var t=(now-t0)/1000;
+  ctx.clearRect(0,0,W,H);
+
+  var p=inOutCubic(seg(t,D.wave[0],D.wave[1]));
+  var fade=1-seg(t,D.bloom[0]+0.1,D.bloom[1]+0.35);   /* waves dissolve into the reveal */
+
+  if(fade>0){
+    ctx.globalCompositeOperation="lighter";
+    var bands=[[0,.5,H*0.030],[1,.34,H*0.020],[-1,.28,H*0.014]];
+    for(var b=0;b<bands.length;b++){
+      var bd=bands[b];
+      ribbon(-1,p,t,bd[0],bd[1]*fade,bd[2]);
+      ribbon( 1,p,t,bd[0],bd[1]*fade,bd[2]);
+    }
+    ctx.globalCompositeOperation="source-over";
+  }
+
+  /* the meeting point blooms and the composition is born from it */
+  if(t>=D.meet){
+    var bp=outQuint(seg(t,D.bloom[0],D.bloom[1]));
+    var r=Math.max(W,H)*(0.06+0.85*bp);
+    var g=ctx.createRadialGradient(W/2,H/2,0,W/2,H/2,r);
+    var a=(1-bp)*0.85;
+    g.addColorStop(0,"rgba(255,247,225,"+(a*0.9)+")");
+    g.addColorStop(0.35,"rgba(231,206,142,"+(a*0.45)+")");
+    g.addColorStop(1,"rgba(201,162,74,0)");
+    ctx.globalCompositeOperation="lighter";
+    ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
+    ctx.globalCompositeOperation="source-over";
+
+    if(!brandDone){ brandDone=true; chefPark(); revealBrand(); }
+  }
+
+  if(!chefDone && t>=D.chef){ chefDone=true; chefIn(); }
+
+  if(t>=D.out){ cancelAnimationFrame(raf); raf=0; end(); }
+}
+raf=requestAnimationFrame(frame);
+
+document.addEventListener("visibilitychange",function(){
+  if(document.hidden){ if(raf){cancelAnimationFrame(raf); raf=0;} }
+  else if(!ended && !raf){ t0=performance.now()-(D.out*1000*0.5); raf=requestAnimationFrame(frame); }
+});
+})();
